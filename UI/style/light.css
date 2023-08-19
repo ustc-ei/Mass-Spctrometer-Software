@@ -1,0 +1,67 @@
+QPushButton#MenuButton {
+    background-color: transparent;
+    color: black;
+    border-radius: 4px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-bottom: 2px solid #EBEBEB;
+    text-align: left;
+}
+
+QPushButton#MenuButton:hover {
+    background-color: rgb(236, 236, 236);
+}
+
+QWidget#MainInterface {
+    background-color: white;
+}
+
+QPushButton#ToolInfoButton {
+    background-color: transparent;
+    color: black;
+    border-radius: 4px;
+    text-align: center;
+}
+
+QPushButton#ToolInfoButton:hover {
+    background-color: rgb(236, 236, 236);
+}
+
+QFrame#LeftFrame {
+    background-color: rgb(243, 243, 243);
+    border: none;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+QListWidget {
+    outline: none;
+    background-color: transparent;
+    border-radius: 4px;
+}
+
+QListView::item {
+    background-color: transparent;
+    color: black;
+    height: 50px;
+    border-radius: 10px;
+    margin: 0px;
+    margin-top: 2px;
+    text-align: center;
+}
+
+QListView::item:selected {
+    background-color: rgb(236, 236, 236);
+    border-left: 4px solid skyblue;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+QListView::item:hover {
+    background-color: rgb(236, 236, 236);
+}
+
+QFrame#InfoToolTip {
+    background-color: white;
+    border-radius: 10px;
+}
