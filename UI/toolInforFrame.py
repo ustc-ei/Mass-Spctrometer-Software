@@ -9,10 +9,9 @@ from PySide6.QtWidgets import (
     QLabel,
     QSpacerItem,
     QApplication,
-    QGraphicsDropShadowEffect
 )
-from PySide6.QtGui import QFont, QPixmap, QPainterPath, QPainter
-from PySide6.QtCore import Qt, QSize, QPoint
+from PySide6.QtGui import QFont, QPixmap, QPainterPath, QPainter, QFocusEvent, QHideEvent
+from PySide6.QtCore import Qt, QSize, QPoint, QEvent
 
 
 # ["Helvetica", "微软雅黑", "宋体"]
@@ -67,10 +66,16 @@ class ToolInfor(QFrame):
     def __init__(self, parent: Optional[QWidget] = None) -> None:
         super(ToolInfor, self).__init__(parent)
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint |
-                            Qt.WindowType.WindowStaysOnTopHint)
+                            Qt.WindowType.WindowStaysOnTopHint |
+                            Qt.WindowType.NoDropShadowWindowHint |
+                            Qt.WindowType.Popup)
+        self.initFlags()
         self.setupUI()
         self.setObjectName("InfoToolTip")
         self.setFixedSize(QSize(400, 400))
+
+    def initFlags(self):
+        self.isVisibleFlag = False
 
     def initialTheLayout(self, layout: Union[QVBoxLayout, QHBoxLayout],
                          widgets: List[Union[QVBoxLayout, QHBoxLayout, QWidget, QSpacerItem]],
@@ -137,6 +142,20 @@ class ToolInfor(QFrame):
         self.mainLayout = QHBoxLayout()
         self.initialTheLayout(self.mainLayout, [self.widget], [1], True)
         self.setLayout(self.mainLayout)
+
+    # def leaveEvent(self, event: QEvent) -> None:
+    #     if self.isVisibleFlag:
+    #         self.isVisibleFlag = False
+    #     self.setVisible(self.isVisibleFlag)
+
+    def hideEvent(self, event: QHideEvent) -> None:
+        if not self.isVisibleFlag:
+            self.isVisibleFlag = True
+
+    # def focusOutEvent(self, event: QFocusEvent) -> None:
+    #     if self.isVisibleFlag:
+    #         self.isVisibleFlag = False
+    #     self.setVisible(self.isVisibleFlag)
 
 
 if __name__ == "__main__":

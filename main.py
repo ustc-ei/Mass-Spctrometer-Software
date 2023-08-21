@@ -1,27 +1,52 @@
-from PySide6.QtWidgets import QMainWindow, QApplication, QGraphicsDropShadowEffect, QLabel
-from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget
+from PySide6.QtGui import QPainter, QColor, QPaintEvent
+import sys
 
 
-class CustomWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setWindowFlags(Qt.FramelessWindowHint)  # 设置无边框窗口
-        self.setWindowTitle("Custom Window")
+class SwitchButton(QPushButton):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setFixedSize(100, 50)
+        self.isSwitchOn = False
+        self.originIsSwitch = False
 
-        # 创建一个 QLabel，模拟窗口内容
-        label = QLabel("Hello, World!")
-        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.setCentralWidget(label)
+    def paintEvent(self, event: QPaintEvent) -> None:
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.Antialiasing)
+        painter.setPen(QColor(221, 221, 221))
+        painter.setBrush(QColor(255, 255, 255))
 
-        # 创建阴影效果，实现圆角
-        shadow = QGraphicsDropShadowEffect()
-        shadow.setBlurRadius(20)  # 阴影模糊半径
-        shadow.setColor(Qt.black)  # 阴影颜色
-        label.setGraphicsEffect(shadow)
+        if self.isSwitchOn:
+            painter.setPen(QColor(140, 225, 149))
+            painter.setBrush(QColor(255, 255, 255))
+
+        rect = event.rect()
+        painter.drawRoundedRect(rect, self.height() // 2, self.height() // 2)
+
+    def enterEvent(self, event):
+        self.originIsSwitch = self.isSwitchOn
+        self.isSwitchOn = not self.isSwitchOn
+        self.update()
+
+    def leaveEvent(self, event):
+        if self.isSwitchOn != self.originIsSwitch:
+            self.isSwitchOn = not self.isSwitchOn
+            self.originIsSwitch = self.originIsSwitch
+        self.update()
+
+    def mousePressEvent(self, event):
+        self.isSwitchOn = not self.originIsSwitch
+        self.originIsSwitch = self.isSwitchOn
+        print(self.isSwitchOn)
+        self.update()
 
 
 if __name__ == "__main__":
-    app = QApplication([])
-    window = CustomWindow()
-    window.show()
-    app.exec()
+    app = QApplication(sys.argv)
+    widget = QWidget()
+    vbox = QVBoxLayout()
+    btn = SwitchButton()
+    vbox.addWidget(btn)
+    widget.setLayout(vbox)
+    widget.show()
+    sys.exit(app.exec())

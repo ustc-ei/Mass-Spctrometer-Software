@@ -10,12 +10,13 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QSpacerItem,
     QFrame,
-    QListWidgetItem
+    QListWidgetItem,
+    QSizePolicy
 )
 
-from PySide6.QtGui import QPixmap, QFont, QResizeEvent, QCloseEvent, QMouseEvent, QMoveEvent
-from PySide6.QtCore import QSize, QPoint, Qt
-
+from PySide6.QtGui import QPixmap, QFont, QResizeEvent, QCloseEvent, QMoveEvent
+from PySide6.QtCore import QSize, QPoint
+from switchButton import SwitchButton
 from toolInforFrame import ToolInfor
 
 
@@ -23,7 +24,6 @@ class PixMap(QPixmap):
     def __init__(self, iconPath: str, size: QSize):
         super(PixMap, self).__init__()
         self.load(iconPath)
-        self.scaledPixMap = self.scaled(size)
 
 
 class Font(QFont):
@@ -50,7 +50,7 @@ class ButtonWithThePixmap(QPushButton):
 
         # Set the button's general properties
         self.name = text
-        self.fixedSize = QSize(200, 50)
+        self.fixedSize = QSize(170, 50)
         self.setMaximumSize(self.fixedSize)
         self.setStyleSheet("text-align:left")
 
@@ -156,11 +156,11 @@ class Navigator(QListWidget):
 
     def setupUI(self):
         for index, itemName in enumerate(self.itemNames):
-            self.setIconSize(QSize(50, 50))
+            self.setIconSize(QSize(30, 30))
             font = Font(15, ["Helvetica", "微软雅黑", "宋体"])
             icon = PixMap(self.itemFigs[index], QSize(30, 30))
             item = QListWidgetItem()
-            item.setIcon(icon.scaledPixMap)
+            item.setIcon(icon)
             item.setText(itemName)
             item.setFont(font)
             self.addItem(item)
@@ -181,8 +181,8 @@ class MainInterface(QWidget):
         """
         super().__init__(parent)
         self.setObjectName("MainInterface")
-        self.setMinimumSize(QSize(400, 400))
-        self.setQss("./style/light.css")
+        self.setMinimumSize(QSize(500, 500))
+        self.setQss("./style/MainInterface.css")
         self.setupUI()
         self.initFlags()
 
@@ -236,19 +236,23 @@ class MainInterface(QWidget):
                               self.menuButton, self.navigatorListWidget, self.navigatorSpacerItem, self.toolInfoButton],
                               [1, 5, 1, 1],
                               True)
+        self.navigatorVboxLayout.setSpacing(3)
+        self.navigatorVboxLayout.setContentsMargins(0, 10, 0, 2)
         self.leftFrame.setLayout(self.navigatorVboxLayout)
         # right layout
         self.stackwidgetsLayout = QVBoxLayout()
         self.stackwidget = QStackedWidget()
         # 1. toggle layout
         self.toggleSwitchLayout = QHBoxLayout()
-        self.toggleFrame = QFrame()
-        self.styleToggleSwitchButton = QPushButton()
+        self.spacerItem1 = QSpacerItem(40, 5, QSizePolicy.Policy.Expanding)
+        self.spacerItem2 = QSpacerItem(20, 5, QSizePolicy.Policy.Minimum)
+        self.styleToggleSwitchButton = SwitchButton()
         # add the right stackWidgets widgtes
         self.initialTheLayout(self.toggleSwitchLayout, [
-                              self.toggleFrame, self.styleToggleSwitchButton],
-                              [3, 1],
+                              self.spacerItem1, self.styleToggleSwitchButton, self.spacerItem2],
+                              [3, 1, 1],
                               True)
+        self.toggleSwitchLayout.setContentsMargins(0, 10, 0, 0)
         # 2. add the stackWidget
         self.initialTheLayout(self.stackwidgetsLayout, [
                               self.toggleSwitchLayout, self.stackwidget],
@@ -264,18 +268,18 @@ class MainInterface(QWidget):
         self.setLayout(self.mainHboxLayout)
         # Info Tool Frame
         self.toolInfoFrame = ToolInfor()
-        self.toolInfoFrameVisible = False
+        self.toolInfoFrame.isVisibleFlag = False
         self.toolInfoButton.clicked.connect(self.changeToolInfoFrameVisible)
 
     def changeToolInfoFrameVisible(self):
-        if self.toolInfoFrameVisible:
+        if self.toolInfoFrame.isVisibleFlag:
             self.toolInfoFrame.setVisible(False)
         else:
             self.toolInfoFrame.setVisible(True)
             pos = self.toolInfoButton.pos() + self.pos()
             size = self.toolInfoButton.size() + QSize(0, -self.toolInfoFrame.widget.height())
             self.toolInfoFrame.move(pos + QPoint(size.width(), size.height()))
-        self.toolInfoFrameVisible = not self.toolInfoFrameVisible
+        self.toolInfoFrame.isVisibleFlag = not self.toolInfoFrame.isVisibleFlag
 
     def shinkNavigationBar(self):
         self.toolInfoButton.changeWithoutText()
@@ -315,8 +319,8 @@ class MainInterface(QWidget):
                 self.menuButton.toggleState(False)
                 self.menuButton.pixMapFlag = not self.menuButton.pixMapFlag
                 self.expandNavigationBar()
-        if self.toolInfoFrameVisible:
-            self.toolInfoFrameVisible = False
+        if self.toolInfoFrame.isVisibleFlag:
+            self.toolInfoFrame.isVisibleFlag = False
             self.toolInfoFrame.setVisible(False)
 
     def toggleState(self):
@@ -329,8 +333,7 @@ class MainInterface(QWidget):
             self.expandNavigationBar()
 
     def closeEvent(self, event: QCloseEvent) -> None:
-        if self.toolInfoFrameVisible:
-            self.toolInfoFrame.close()
+        self.toolInfoFrame.close()
 
     # def mousePressEvent(self, event: QMouseEvent) -> None:
     #     if event.buttons() == Qt.MouseButton.LeftButton:
@@ -352,8 +355,8 @@ class MainInterface(QWidget):
     #                     self.toolInfoFrame.pos() + diff)
 
     def moveEvent(self, event: QMoveEvent) -> None:
-        if self.toolInfoFrameVisible:
-            self.toolInfoFrameVisible = False
+        if self.toolInfoFrame.isVisibleFlag:
+            self.toolInfoFrame.isVisibleFlag = False
             self.toolInfoFrame.setVisible(False)
 
 

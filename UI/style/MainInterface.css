@@ -13,7 +13,7 @@ QPushButton#MenuButton:hover {
 }
 
 QWidget#MainInterface {
-    background-color: white;
+    background-color: rgb(221, 221, 221);
 }
 
 QPushButton#ToolInfoButton {
@@ -30,8 +30,7 @@ QPushButton#ToolInfoButton:hover {
 QFrame#LeftFrame {
     background-color: rgb(243, 243, 243);
     border: none;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
+    border-radius: 10px;
 }
 
 QListWidget {
@@ -62,6 +61,6 @@ QListView::item:hover {
 }
 
 QFrame#InfoToolTip {
-    background-color: white;
+    background-color: rgb(108, 33, 33);
     border-radius: 10px;
 }
