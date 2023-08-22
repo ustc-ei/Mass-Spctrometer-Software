@@ -15,7 +15,7 @@ from PySide6.QtWidgets import (
 )
 
 from PySide6.QtGui import QPixmap, QFont, QResizeEvent, QCloseEvent, QMoveEvent
-from PySide6.QtCore import QSize, QPoint
+from PySide6.QtCore import QSize, QPoint, QItemSelection
 from switchButton import SwitchButton
 from toolInforFrame import ToolInfor
 
@@ -27,10 +27,11 @@ class PixMap(QPixmap):
 
 
 class Font(QFont):
-    def __init__(self, fontSize: int, fontFamiles: List[str]):
+    def __init__(self, fontSize: int, fontFamiles: List[str], isBold: bool = False):
         super(Font, self).__init__()
         self.setPointSize(fontSize)
         self.setFamilies(fontFamiles)
+        self.setBold(isBold)
 
 
 class ButtonWithThePixmap(QPushButton):
@@ -76,7 +77,7 @@ class ButtonWithThePixmap(QPushButton):
         """
         self.pixMap.load(pixMapPath)
         self.setText(text)
-        self.pixMap = self.pixMap.scaled(self.pixMapSize)
+        # self.pixMap = self.pixMap.scaled(self.pixMapSize)
         self.setFixedSize(size)
         self.setIcon(self.pixMap)
 
@@ -145,35 +146,6 @@ class MenuButton(ButtonWithThePixmap):
             self.pixMapFlag = not self.pixMapFlag
 
 
-class Navigator(QListWidget):
-    def __init__(self, parent: Optional[QWidget] = None) -> None:
-        super(Navigator, self).__init__(parent)
-        self.setMaximumWidth(200)
-        self.itemNames = ["首页", "仪器配置", "仪器控制", "数据采集", "定性分析"]
-        self.itemFigs = ["./figs/首页.svg", "./figs/仪器配置.svg", "./figs/仪器控制.svg",
-                         "./figs/数据采集.svg", "./figs/定性分析.svg"]
-        self.setupUI()
-
-    def setupUI(self):
-        for index, itemName in enumerate(self.itemNames):
-            self.setIconSize(QSize(30, 30))
-            font = Font(15, ["Helvetica", "微软雅黑", "宋体"])
-            icon = PixMap(self.itemFigs[index], QSize(30, 30))
-            item = QListWidgetItem()
-            item.setIcon(icon)
-            item.setText(itemName)
-            item.setFont(font)
-            self.addItem(item)
-
-    def clearText(self):
-        for i in range(self.count()):
-            self.item(i).setText("")
-
-    def recoverText(self):
-        for i in range(self.count()):
-            self.item(i).setText(self.itemNames[i])
-
-
 class MainInterface(QWidget):
     def __init__(self, parent: Optional[QWidget] = None) -> None:
         """
@@ -237,7 +209,7 @@ class MainInterface(QWidget):
                               [1, 5, 1, 1],
                               True)
         self.navigatorVboxLayout.setSpacing(3)
-        self.navigatorVboxLayout.setContentsMargins(0, 10, 0, 2)
+        self.navigatorVboxLayout.setContentsMargins(0, 0, 0, 2)
         self.leftFrame.setLayout(self.navigatorVboxLayout)
         # right layout
         self.stackwidgetsLayout = QVBoxLayout()
@@ -314,7 +286,7 @@ class MainInterface(QWidget):
                 self.menuButton.pixMapFlag = not self.menuButton.pixMapFlag
                 self.shinkNavigationBar()
 
-        elif event.size().width() > 800 or event.size().height() > 00:
+        elif event.size().width() > 800 or event.size().height() > 800:
             if self.menuButton.pixMapFlag:
                 self.menuButton.toggleState(False)
                 self.menuButton.pixMapFlag = not self.menuButton.pixMapFlag
@@ -335,6 +307,10 @@ class MainInterface(QWidget):
     def closeEvent(self, event: QCloseEvent) -> None:
         self.toolInfoFrame.close()
 
+    def moveEvent(self, event: QMoveEvent) -> None:
+        if self.toolInfoFrame.isVisibleFlag:
+            self.toolInfoFrame.isVisibleFlag = False
+            self.toolInfoFrame.setVisible(False)
     # def mousePressEvent(self, event: QMouseEvent) -> None:
     #     if event.buttons() == Qt.MouseButton.LeftButton:
     #         self.moveFlag = True
@@ -350,14 +326,50 @@ class MainInterface(QWidget):
     #     if self.moveFlag:
     #         if diff.manhattanLength() > 5:  # 设置阈值，避免过于频繁的移动
     #             self.move(self.pos() + diff)
-    #             if self.toolInfoFrameVisible:
+    #             if self.toolInfoFrame.isVisibleFlag:
     #                 self.toolInfoFrame.move(
     #                     self.toolInfoFrame.pos() + diff)
 
-    def moveEvent(self, event: QMoveEvent) -> None:
-        if self.toolInfoFrame.isVisibleFlag:
-            self.toolInfoFrame.isVisibleFlag = False
-            self.toolInfoFrame.setVisible(False)
+
+class Navigator(QListWidget):
+    def __init__(self, parent: Optional[Union[QWidget, MainInterface]] = None) -> None:
+        super(Navigator, self).__init__(parent)
+        self._parent = parent
+        self.setMaximumWidth(200)
+        self.itemNames = ["首页", "仪器配置", "仪器控制", "数据采集", "定性分析"]
+        self.itemFigs = ["./figs/首页.svg", "./figs/仪器配置.svg", "./figs/仪器控制.svg",
+                         "./figs/数据采集.svg", "./figs/定性分析.svg"]
+        self.itemSelectedFont = Font(15, ["Helvetica", "微软雅黑", "宋体"], True)
+        self.itemNoSelectedFont = Font(15, ["Helvetica", "微软雅黑", "宋体"])
+        self.setupUI()
+
+    def setupUI(self):
+        for index, itemName in enumerate(self.itemNames):
+            self.setIconSize(QSize(30, 30))
+            icon = PixMap(self.itemFigs[index], QSize(30, 30))
+            item = QListWidgetItem()
+            item.setIcon(icon)
+            item.setText(itemName)
+            item.setFont(self.itemNoSelectedFont)
+            self.addItem(item)
+
+    def clearText(self):
+        for i in range(self.count()):
+            self.item(i).setText("")
+
+    def recoverText(self):
+        for i in range(self.count()):
+            self.item(i).setText(self.itemNames[i])
+
+    def selectionChanged(self, selected: QItemSelection, deselected: QItemSelection) -> None:
+        if deselected.indexes():
+            self.item(deselected.indexes()[0].row()).setFont(
+                self.itemNoSelectedFont)
+        self.item(selected.indexes()[0].row()).setFont(self.itemSelectedFont)
+        # toggle the current widget of the stackwidgets
+        # typing
+        # self._parent.stackwidget.setCurrentWidget(  # type: ignore
+        #     self.item(selected.indexes()[0].row()))  # type: ignore
 
 
 if __name__ == "__main__":

@@ -34,8 +34,6 @@ class SwitchButton(QPushButton):
         self.setPoint()
         self.clicked.connect(self.triggleSwitch)
 
-
-
     def initPaintRectAndCircle(self):
         self.setFixedSize(125, 50)
         self.paintRect = QRect(0, 0, self.width(), self.height())
