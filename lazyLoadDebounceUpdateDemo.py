@@ -11,7 +11,7 @@ from PySide6.QtWidgets import (
     QScrollArea
 )
 from PySide6.QtCore import QSize, Qt, QTimer
-from PySide6.QtGui import QResizeEvent
+from PySide6.QtGui import QResizeEvent, QWheelEvent
 
 
 class CardFrame(QFrame):
@@ -122,6 +122,14 @@ class DynamicLayoutApp(QScrollArea):
     def debounce_update_layout(self):
         self.update_timer.stop()  # type: ignore
         self.updateLayout()
+
+    def wheelEvent(self, wheelEvent: QWheelEvent):
+        # Handle wheel scrolling event
+        scroll_bar = self.verticalScrollBar()
+        if wheelEvent.angleDelta().y() < 0:
+            if scroll_bar.value() == scroll_bar.maximum():
+                self.updateLayout()
+        super().wheelEvent(wheelEvent)
 
 
 if __name__ == "__main__":

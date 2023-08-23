@@ -3,10 +3,9 @@
 ## 正在开发中, 打算在八月底完成所有 UI 界面
 
 ### 目前已完成的页面
-1. 主界面导航栏, 动态伸缩变换
-2. 软件开发者信息栏
-3. 动态加载控件 demo
-
+1. 主界面导航栏, 动态收缩变换, 软件开发者信息栏
+2. 动态加载控件的 demo
+3. homePage 页
 ### 1. 主界面和开发者信息栏
 ![](figs/主界面.png)
 
@@ -50,4 +49,17 @@ class Debounce:
         self.timer = QTimer()
         self.timer.timeout.connect(self.func)
         self.timer.start(self.delay)
-# 还需要在目标的 func 中添加一段 self.timer.stop(), 因此 QTimer 会循环调用
+```
+> 实现的细节可见 `lazyLoadDebounceUpdateDemo.py` 文件
+
+### 3. homePage 页
+该页面准备展示设定好的质谱仪以及液相仪的参数和数据采集/图片绘制的进度
+
+![](./figs/Home.png)
+
+### 4. 后续安排
+
+按照一天一个页面的进度的话, 预计在 8 月 26 日完成所有页面的设计, 但是因为目前质谱仪硬件接口以及数据交互 $\text{(可以选择本地的数据库使用 sqlite, python自带 sqlite3 库; }$$\text{也可以使用远程数据库连接, 不过需要再实现后端代码实现高并发}$
+$\text{仓库中有个高并发的 go 语言后端代码示例, 可以处理多个请求, 可以参考一下, 实验室服务器需要装下 mysql 还有go 语言的环境)}$的方式未确定, 因此软件页面设计以及窗口完成之后需要花很多的时间研究硬件的接口, 该软件的主要难点也在于此, 还有就是打包的问题, 可以使用 nuikta 库打包文件, 详情参见博客 https://blog.rainzee.wang/postsnuitka-plugin-system.html
+
+
