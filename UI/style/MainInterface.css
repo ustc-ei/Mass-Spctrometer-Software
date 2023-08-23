@@ -23,6 +23,13 @@ QPushButton#ToolInfoButton {
     text-align: center;
 }
 
+QPushButton#ToolInfoButton {
+    background-color: transparent;
+    color: white;
+    border-radius: 4px;
+    text-align: center;
+}
+
 QPushButton#ToolInfoButton:hover {
     background-color: rgba(74, 89, 146, 100);
 }
@@ -35,7 +42,7 @@ QFrame#LeftFrame {
     border-top-left-radius: 0px;
 }
 
-QListWidget {
+QListWidget#MainLeftNavigator {
     outline: none;
     background-color: transparent;
     border-radius: 4px;
@@ -43,7 +50,7 @@ QListWidget {
     border-top-left-radius: 0px;
 }
 
-QListWidget::item {
+QListWidget#MainLeftNavigator::item {
     background-color: transparent;
     color: white;
     height: 50px;
@@ -53,7 +60,7 @@ QListWidget::item {
     text-align: center;
 }
 
-QListWidget::item:selected {
+QListWidget#MainLeftNavigator::item:selected {
     font-weight: bold;
     background-color: rgb(74, 89, 146);
     color: white;
@@ -62,11 +69,6 @@ QListWidget::item:selected {
     border-bottom-left-radius: 0px;
 }
 
-QListWidget::item:hover {
+QListWidget#HomePageNavigator::item:hover {
     background-color: rgba(74, 89, 146, 100);
-}
-
-QFrame#InfoToolTip {
-    background-color: rgb(108, 33, 33);
-    border-radius: 10px;
 }

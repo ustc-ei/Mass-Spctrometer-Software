@@ -2,24 +2,15 @@ from typing import Optional, Union, List
 import sys
 from PySide6.QtWidgets import (
     QFrame,
-    QToolTip,
     QWidget,
     QVBoxLayout,
     QHBoxLayout,
     QLabel,
-    QSpacerItem,
     QApplication,
 )
-from PySide6.QtGui import QFont, QPixmap, QPainterPath, QPainter, QFocusEvent, QHideEvent
-from PySide6.QtCore import Qt, QSize, QPoint, QEvent
-
-
-# ["Helvetica", "微软雅黑", "宋体"]
-class Font(QFont):
-    def __init__(self, fontSize: int, fontFamiles: List[str]):
-        super(Font, self).__init__()
-        self.setPointSize(fontSize)
-        self.setFamilies(fontFamiles)
+from PySide6.QtGui import QPixmap, QPainterPath, QPainter, QHideEvent
+from PySide6.QtCore import Qt, QSize, QPoint
+from utils import *
 
 
 class CircularLabel(QLabel):
@@ -77,29 +68,6 @@ class ToolInfor(QFrame):
     def initFlags(self):
         self.isVisibleFlag = False
 
-    def initialTheLayout(self, layout: Union[QVBoxLayout, QHBoxLayout],
-                         widgets: List[Union[QVBoxLayout, QHBoxLayout, QWidget, QSpacerItem]],
-                         stretch: List[int],
-                         SpacintAndMarginIf: bool = False):
-        """
-        Initialize the layout by adding widgets and setting their stretching factors.
-
-        Parameters:
-        * layout: The QVBoxLayout or QHBoxLayout to be initialized.
-        * widgets: A list of widgets or layouts to be added to the layout.
-        * stretch: A list of stretching factors corresponding to each widget/layout.
-        """
-        for index, item in enumerate(widgets):
-            if isinstance(item, QWidget):
-                layout.addWidget(item, stretch[index])
-            elif isinstance(item, QSpacerItem):
-                layout.addItem(item)
-            else:
-                layout.addLayout(item, stretch[index])
-        if SpacintAndMarginIf:
-            layout.setContentsMargins(0, 0, 0, 0)
-            layout.setSpacing(0)
-
     def setupUI(self):
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground, True)
         self.widget = QWidget()
@@ -134,13 +102,13 @@ class ToolInfor(QFrame):
         self.statementLayout.addWidget(self.statement1)
         self.statementLayout.addWidget(self.statement2)
         # add the widgets to the layout
-        self.initialTheLayout(
-            self.vboxlayout, [self.title, self.authorPicHBoxLayout, self.author, self.statementLayout], [2, 2, 1, 1])
+        initialTheLayout(self.vboxlayout, [
+                         self.title, self.authorPicHBoxLayout, self.author, self.statementLayout], [2, 2, 1, 1])
         # widget layout
         self.widget.setLayout(self.vboxlayout)
         # main layout
         self.mainLayout = QHBoxLayout()
-        self.initialTheLayout(self.mainLayout, [self.widget], [1], True)
+        initialTheLayout(self.mainLayout, [self.widget], [1], True)
         self.setLayout(self.mainLayout)
 
     # def leaveEvent(self, event: QEvent) -> None:

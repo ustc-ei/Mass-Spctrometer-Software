@@ -1,6 +1,5 @@
 import sys
-from typing import Optional, List
-from enum import Enum
+from typing import Optional
 from PySide6.QtWidgets import (
     QApplication,
     QPushButton,
@@ -12,17 +11,9 @@ from PySide6.QtGui import (
     QColor,
     QPaintEvent,
     QPen,
-    QFont
 )
 from PySide6.QtCore import QRect, Qt, QSize, QPoint
-
-
-class Font(QFont):
-    def __init__(self, fontSize: int, fontFamiles: List[str], boldIf: bool = True):
-        super(Font, self).__init__()
-        self.setPointSize(fontSize)
-        self.setFamilies(fontFamiles)
-        self.setBold(boldIf)
+from utils import *
 
 
 class SwitchButton(QPushButton):
@@ -132,7 +123,6 @@ class SwitchButton(QPushButton):
     def triggleSwitch(self, event):
         self.isSwitchOn = not self.originIsSwitch
         self.originIsSwitch = self.isSwitchOn
-        # print(self.isSwitchOn)
         self.update()
 
 

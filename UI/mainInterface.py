@@ -4,34 +4,21 @@ from PySide6.QtWidgets import (
     QApplication,
     QPushButton,
     QWidget,
-    QListWidget,
     QStackedWidget,
     QVBoxLayout,
     QHBoxLayout,
     QSpacerItem,
     QFrame,
-    QListWidgetItem,
     QSizePolicy
 )
 
-from PySide6.QtGui import QPixmap, QFont, QResizeEvent, QCloseEvent, QMoveEvent
-from PySide6.QtCore import QSize, QPoint, QItemSelection
+from PySide6.QtGui import QPixmap, QResizeEvent, QCloseEvent, QMoveEvent
+from PySide6.QtCore import QSize, QPoint
 from switchButton import SwitchButton
 from toolInforFrame import ToolInfor
-
-
-class PixMap(QPixmap):
-    def __init__(self, iconPath: str, size: QSize):
-        super(PixMap, self).__init__()
-        self.load(iconPath)
-
-
-class Font(QFont):
-    def __init__(self, fontSize: int, fontFamiles: List[str], isBold: bool = False):
-        super(Font, self).__init__()
-        self.setPointSize(fontSize)
-        self.setFamilies(fontFamiles)
-        self.setBold(isBold)
+from utils import initialTheLayout, Font, QPixmap
+from navigator import Navigator
+from homePage import HomePage
 
 
 class ButtonWithThePixmap(QPushButton):
@@ -154,37 +141,14 @@ class MainInterface(QWidget):
         super().__init__(parent)
         self.setObjectName("MainInterface")
         self.setMinimumSize(QSize(500, 500))
-        self.setQss("./style/MainInterface.css")
         self.setupUI()
+        self.setQss("./style/MainInterface.css")
         self.initFlags()
 
     def initFlags(self):
-        self.menuButton.clicked.connect(self.toggleState)
         self.navigatorListWidget.setCurrentRow(0)
+        self.menuButton.clicked.connect(self.toggleState)
         self.moveFlag = False
-
-    def initialTheLayout(self, layout: Union[QVBoxLayout, QHBoxLayout],
-                         widgets: List[Union[QVBoxLayout, QHBoxLayout, QWidget, QSpacerItem]],
-                         stretch: List[int],
-                         SpacintAndMarginIf: bool):
-        """
-        Initialize the layout by adding widgets and setting their stretching factors.
-
-        Parameters:
-        * layout: The QVBoxLayout or QHBoxLayout to be initialized.
-        * widgets: A list of widgets or layouts to be added to the layout.
-        * stretch: A list of stretching factors corresponding to each widget/layout.
-        """
-        for index, item in enumerate(widgets):
-            if isinstance(item, QWidget):
-                layout.addWidget(item, stretch[index])
-            elif isinstance(item, QSpacerItem):
-                layout.addItem(item)
-            else:
-                layout.addLayout(item, stretch[index])
-        if SpacintAndMarginIf:
-            layout.setContentsMargins(0, 0, 0, 0)
-            layout.setSpacing(0)
 
     def setQss(self, style_path):
         with open(style_path, "r") as style_file:
@@ -200,43 +164,51 @@ class MainInterface(QWidget):
         self.navigatorVboxLayout = QVBoxLayout()
         self.navigatorVboxLayout.maximumSize()
         self.menuButton = MenuButton("菜单栏", "MenuButton", self)
-        self.navigatorListWidget = Navigator(self)
+        self.navigatorItemsName = ["首页", "仪器配置", "仪器控制", "数据采集", "定性分析"]
+        self.navigatorItemsPixPath = ["./figs/首页.svg", "./figs/仪器配置.svg", "./figs/仪器控制.svg",
+                                      "./figs/数据采集.svg", "./figs/定性分析.svg"]
+        self.navigatorListWidget = Navigator(
+            self.navigatorItemsName, True, self.navigatorItemsPixPath, self)
+        self.navigatorListWidget.setObjectName("MainLeftNavigator")
+        self.navigatorListWidget.setMaximumWidth(200)
         self.navigatorSpacerItem = QSpacerItem(20, 40)
         self.toolInfoButton = ToolInfoButton("软件相关信息", "ToolInfoButton", self)
         # add the left navigator widgets
-        self.initialTheLayout(self.navigatorVboxLayout, [
-                              self.menuButton, self.navigatorListWidget, self.navigatorSpacerItem, self.toolInfoButton],
-                              [1, 5, 1, 1],
-                              True)
+        initialTheLayout(self.navigatorVboxLayout, [
+            self.menuButton, self.navigatorListWidget, self.navigatorSpacerItem, self.toolInfoButton],
+            [1, 5, 1, 1],
+            True)
         self.navigatorVboxLayout.setSpacing(3)
         self.navigatorVboxLayout.setContentsMargins(0, 0, 0, 2)
         self.leftFrame.setLayout(self.navigatorVboxLayout)
         # right layout
         self.stackwidgetsLayout = QVBoxLayout()
-        self.stackwidget = QStackedWidget()
+        self.stackWidget = QStackedWidget()
+        self.homePage = HomePage()
+        self.stackWidget.addWidget(self.homePage)
         # 1. toggle layout
         self.toggleSwitchLayout = QHBoxLayout()
         self.spacerItem1 = QSpacerItem(40, 5, QSizePolicy.Policy.Expanding)
         self.spacerItem2 = QSpacerItem(20, 5, QSizePolicy.Policy.Minimum)
         self.styleToggleSwitchButton = SwitchButton()
         # add the right stackWidgets widgtes
-        self.initialTheLayout(self.toggleSwitchLayout, [
-                              self.spacerItem1, self.styleToggleSwitchButton, self.spacerItem2],
-                              [3, 1, 1],
-                              True)
+        initialTheLayout(self.toggleSwitchLayout, [
+            self.spacerItem1, self.styleToggleSwitchButton, self.spacerItem2],
+            [3, 1, 1],
+            True)
         self.toggleSwitchLayout.setContentsMargins(0, 10, 0, 0)
         # 2. add the stackWidget
-        self.initialTheLayout(self.stackwidgetsLayout, [
-                              self.toggleSwitchLayout, self.stackwidget],
-                              [1, 5],
-                              True)
+        initialTheLayout(self.stackwidgetsLayout, [
+            self.toggleSwitchLayout, self.stackWidget],
+            [1, 5],
+            True)
         # main layout
         self.mainHboxLayout = QHBoxLayout()
         # add the main sub-layouts
-        self.initialTheLayout(self.mainHboxLayout, [
-                              self.leftFrame, self.stackwidgetsLayout],
-                              [1, 3],
-                              True)
+        initialTheLayout(self.mainHboxLayout, [
+            self.leftFrame, self.stackwidgetsLayout],
+            [1, 3],
+            True)
         self.setLayout(self.mainHboxLayout)
         # Info Tool Frame
         self.toolInfoFrame = ToolInfor()
@@ -329,47 +301,6 @@ class MainInterface(QWidget):
     #             if self.toolInfoFrame.isVisibleFlag:
     #                 self.toolInfoFrame.move(
     #                     self.toolInfoFrame.pos() + diff)
-
-
-class Navigator(QListWidget):
-    def __init__(self, parent: Optional[Union[QWidget, MainInterface]] = None) -> None:
-        super(Navigator, self).__init__(parent)
-        self._parent = parent
-        self.setMaximumWidth(200)
-        self.itemNames = ["首页", "仪器配置", "仪器控制", "数据采集", "定性分析"]
-        self.itemFigs = ["./figs/首页.svg", "./figs/仪器配置.svg", "./figs/仪器控制.svg",
-                         "./figs/数据采集.svg", "./figs/定性分析.svg"]
-        self.itemSelectedFont = Font(15, ["Helvetica", "微软雅黑", "宋体"], True)
-        self.itemNoSelectedFont = Font(15, ["Helvetica", "微软雅黑", "宋体"])
-        self.setupUI()
-
-    def setupUI(self):
-        for index, itemName in enumerate(self.itemNames):
-            self.setIconSize(QSize(30, 30))
-            icon = PixMap(self.itemFigs[index], QSize(30, 30))
-            item = QListWidgetItem()
-            item.setIcon(icon)
-            item.setText(itemName)
-            item.setFont(self.itemNoSelectedFont)
-            self.addItem(item)
-
-    def clearText(self):
-        for i in range(self.count()):
-            self.item(i).setText("")
-
-    def recoverText(self):
-        for i in range(self.count()):
-            self.item(i).setText(self.itemNames[i])
-
-    def selectionChanged(self, selected: QItemSelection, deselected: QItemSelection) -> None:
-        if deselected.indexes():
-            self.item(deselected.indexes()[0].row()).setFont(
-                self.itemNoSelectedFont)
-        self.item(selected.indexes()[0].row()).setFont(self.itemSelectedFont)
-        # toggle the current widget of the stackwidgets
-        # typing
-        # self._parent.stackwidget.setCurrentWidget(  # type: ignore
-        #     self.item(selected.indexes()[0].row()))  # type: ignore
 
 
 if __name__ == "__main__":

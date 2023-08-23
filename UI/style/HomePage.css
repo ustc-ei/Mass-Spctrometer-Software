@@ -1,0 +1,107 @@
+QListWidget#HomePageNavigator {
+    border: none;
+    border-radius: 20px;
+    outline: none;
+    background-color: transparent;
+    margin-left: 10px;
+}
+
+QListWidget#HomePageNavigator::item {
+    background-color: rgb(163, 198, 218);
+    color: white;
+    border: none;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    /* border-radius: 20px; */
+    min-width: 100px;
+    max-width: 150px;
+    padding-left: 10px;
+    margin: 0px;
+    margin-left: 5px;
+    margin-right: 10px;
+}
+
+QListWidget#HomePageNavigator::item:selected {
+    background-color: rgb(96, 157, 191);
+    border-bottom: 4px solid white;
+}
+
+QListWidget#HomePageNavigator::item:hover {
+    background-color: rgba(96, 157, 191, 200);
+}
+
+
+QFrame#NavigatorFrame {
+    background-color: rgb(163, 198, 218);
+    border: none;
+    border-radius: 20px;
+}
+
+QScrollArea {
+    background-color: rgb(241, 244, 255);
+}
+
+QScrollBar:vertical {
+    border: none;
+    background: transparent;
+    width: 6px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background-color: rgb(139, 139, 139);
+    border-radius: 3px;
+    min-height: 80px;
+    /* 设置一个固定的最小高度 */
+    max-height: 100px;
+    /* 设置一个固定的最大高度 */
+    margin: 0px;
+    /* 清除滑块的边距 */
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #777;
+}
+
+QScrollBar::add-line:vertical {
+    height: 0px;
+}
+
+QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+QFrame#Card {
+    background-color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 30px;
+}
+
+QFrame#CardBorder {
+    background-color: rgba(210, 221, 250, 120);
+}
+
+QLabel#title {
+    font-size: 20px;
+    font-family: "Helvetica", "微软雅黑", "宋体";
+    color: rgb(144, 149, 160);
+}
+
+QLabel#parameterName {
+    background-color: rgba(135, 206, 235, 140);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-family: "Helvetica", "微软雅黑", "宋体";
+    font-size: 18px;
+}
+
+QLabel#parameterValue {
+    background-color: rgba(135, 206, 235, 200);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-family: "Helvetica", "微软雅黑", "宋体";
+    font-size: 18px;
+    font-weight: bold;
+}

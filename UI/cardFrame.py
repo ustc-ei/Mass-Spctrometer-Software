@@ -1,44 +1,88 @@
 import sys
-from typing import Optional, List, Callable
-import threading
+from typing import List, Callable, Union
+
 from PySide6.QtWidgets import (
     QFrame,
     QWidget,
     QApplication,
     QGridLayout,
     QHBoxLayout,
-    QPushButton,
     QSizePolicy,
-    QScrollArea
+    QScrollArea,
+    QLabel
 )
+
 from PySide6.QtCore import QSize, Qt, QTimer
 from PySide6.QtGui import QResizeEvent, QWheelEvent
+from utils import *
 
 
 class CardFrame(QFrame):
-    def __init__(self, buttonText: str, parent=None):
+    def __init__(self, title: str, parameterNums: int, parent=None):
         super(CardFrame, self).__init__(parent)
-        self.buttonText = buttonText
+        self.titleStr = title
+        self.parameterNums = parameterNums
+        self.setObjectName("CardBorder")
         self.setupUI()
         self.setMinAndMaxSize()
+        self.updateParameters([1, 2, 3, 4, 5])
+
+    def updateParameters(self, data: List[Union[int, str]]):
+        """
+        update the parameters once you set the mass or liquid parameters
+        """
+        for i, item in enumerate(data):
+            self.parametersValue[i].setText(str(item))
 
     def setupUI(self):
-        # Create a horizontal layout for the card
-        self.qhBoxLayout = QHBoxLayout()
-        self.button = QPushButton()
-        self.button.setText(self.buttonText)
-        # Set button's size policy to expanding in both dimensions
-        self.button.setSizePolicy(
-            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.qhBoxLayout.setSpacing(0)
-        self.qhBoxLayout.setContentsMargins(0, 0, 0, 0)
-        self.qhBoxLayout.addWidget(self.button)
-        self.setLayout(self.qhBoxLayout)
+        self.contentFrame = QFrame()
+        self.contentFrame.setObjectName("Card")
+        # title
+        self.title = QLabel()
+        self.title.setText(self.titleStr)
+        self.title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.title.setObjectName("title")
+        # Parameters
+        self.parametersName = [QLabel()
+                               for _ in range(self.parameterNums)]
+        for i, parameterName in enumerate(self.parametersName):
+            parameterName.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            parameterName.setSizePolicy(
+                QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)  # type: ignore
+            parameterName.setObjectName("parameterName")
+            parameterName.setText(f'质谱仪参数{i + 1}:')
+        self.parametersValue = [QLabel() for _ in range(self.parameterNums)]
+        for parameterValue in self.parametersValue:
+            parameterValue.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            parameterValue.setSizePolicy(
+                QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)  # type: ignore
+            parameterValue.setObjectName("parameterValue")
+        # Parameters Layout
+        self.hBoxLayoutList = [QHBoxLayout()
+                               for _ in range(self.parameterNums)]
+        for layout in self.hBoxLayoutList:
+            layout.setSpacing(4)
+            layout.setContentsMargins(2, 0, 2, 0)
+        for i in range(self.parameterNums):
+            initialTheLayout(self.hBoxLayoutList[i], [
+                             self.parametersName[i], self.parametersValue[i]], [1, 1])
+        self.vBoxLayout = QVBoxLayout()
+        self.vBoxLayout.addWidget(self.title)
+        initialTheLayout(self.vBoxLayout, self.hBoxLayoutList, [  # type: ignore
+                         1 for _ in range(self.parameterNums)])
+        self.vBoxLayout.setSpacing(5)
+        self.vBoxLayout.setContentsMargins(5, 0, 5, 10)
+        self.contentFrame.setLayout(self.vBoxLayout)
+        # content Layout
+        self.contentLayout = QHBoxLayout()
+        self.contentLayout.addWidget(self.contentFrame)
+        self.contentLayout.setContentsMargins(4, 10, 4, 10)
+        self.setLayout(self.contentLayout)
 
     def setMinAndMaxSize(self):
         # Set minimum and maximum dimensions for the card
-        self.setMaximumSize(QSize(150, 50))
-        self.setMinimumSize(QSize(100, 50))
+        self.setMaximumSize(QSize(300, 300))
+        self.setMinimumSize(QSize(200, 200))
 
 
 class Debounce:
@@ -55,7 +99,7 @@ class Debounce:
             self.timer.deleteLater()
             self.timer = None
         self.timer = QTimer()
-        self.timer.timeout.connect(self.func)
+        self.timer.timeout.connect(lambda: self.func(True))
         self.timer.start(self.delay)
 
 
@@ -64,18 +108,27 @@ class DynamicLayoutApp(QScrollArea):
     A scroll area containing dynamically updating cards with debounce mechanism.
     """
 
-    def __init__(self, cards):
+    def __init__(self, cards: List[CardFrame]):
         super().__init__()
         self.cards: List[CardFrame] = cards
+        self.setObjectName("ParametersScollArea")
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        # self.setStyleSheet(self.readQss("./style/HomePage.css"))
         self.initParameters()
         self.initFlags()
         self.initUI()
 
+    def readQss(self, style_path) -> str:
+        with open(style_path, "r") as style_file:
+            Qssfile = style_file.read()
+        return Qssfile
+
     def initParameters(self):
         # Initialize layout parameters
         self.columns = 0
-        self.spacing = 2
-        self.maxViewRow = 20
+        self.spacing = 5
+        self.initRows = 20
+        self.updateRows = 10
         self.nowIndex = 0
         self.nowRow = 0
         self.nowColumn = 0
@@ -95,7 +148,7 @@ class DynamicLayoutApp(QScrollArea):
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.gridLayout = QGridLayout()
         self.gridLayout.setSpacing(self.spacing)
-        self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout.setContentsMargins(5, 5, 5, 5)
         self.setWidget(self.CardWidget)
         self.CardWidget.setLayout(self.gridLayout)
         # Make the scroll area's content resizable
@@ -119,7 +172,7 @@ class DynamicLayoutApp(QScrollArea):
                 self.gridLayout.removeWidget(widget)
                 widget.setParent(None)  # type: ignore
 
-    def updateLayout(self):
+    def updateLayout(self, isInitial: bool = False):
         # Update the layout of the scroll area's content
         print("update")
         self.debounce_update_layout.timer.stop()  # type: ignore
@@ -128,7 +181,9 @@ class DynamicLayoutApp(QScrollArea):
         if self.ifReLayout(numColumns):
             self.clearWidgets()
             self.updateRowColAndIndex(0, 0, 0)
-        maxViewNum = self.maxViewRow * numColumns
+        maxViewNum = self.updateRows * numColumns
+        if isInitial:
+            maxViewNum = self.initRows * numColumns
         updateNum = min(maxViewNum, len(self.cards) - self.nowIndex)
         numRows = (updateNum + self.nowColumn) // numColumns
         for i in range(numRows):
@@ -147,7 +202,7 @@ class DynamicLayoutApp(QScrollArea):
         scroll_bar = self.verticalScrollBar()
         if wheelEvent.angleDelta().y() < 0:
             if scroll_bar.value() == scroll_bar.maximum():
-                self.updateLayout()
+                self.updateLayout(False)
         super().wheelEvent(wheelEvent)
 
     def ifReLayout(self, numColumns) -> bool:
@@ -166,8 +221,8 @@ class DynamicLayoutApp(QScrollArea):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     card_list = []
-    for i in range(6000):
-        card_list.append(CardFrame(str(i)))
+    for i in range(101):
+        card_list.append(CardFrame(f'质谱仪参数', 5))
     dynamic_layout_app = DynamicLayoutApp(card_list)
     dynamic_layout_app.show()
     sys.exit(app.exec())
