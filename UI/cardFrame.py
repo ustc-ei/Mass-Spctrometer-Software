@@ -1,5 +1,5 @@
 import sys
-from typing import List, Callable, Union
+from typing import List, Callable, Union, Optional
 
 from PySide6.QtWidgets import (
     QFrame,
@@ -18,7 +18,15 @@ from utils import *
 
 
 class CardFrame(QFrame):
-    def __init__(self, title: str, parameterNums: int, parent=None):
+    def __init__(self, title: str, parameterNums: int, parent: Optional[QWidget] = None):
+        """
+        Initialize a card frame.
+
+        Parameters:
+        * title: The title of the card.
+        * parameterNums: The number of parameters in the card.
+        * parent: The parent widget (default is None).
+        """
         super(CardFrame, self).__init__(parent)
         self.titleStr = title
         self.parameterNums = parameterNums
@@ -29,12 +37,18 @@ class CardFrame(QFrame):
 
     def updateParameters(self, data: List[Union[int, str]]):
         """
-        update the parameters once you set the mass or liquid parameters
+        Update the displayed parameters on the card.
+
+        Parameters:
+        * data: A list of parameter values to update.
         """
         for i, item in enumerate(data):
             self.parametersValue[i].setText(str(item))
 
     def setupUI(self):
+        """
+        Set up the UI elements for the card
+        """
         self.contentFrame = QFrame()
         self.contentFrame.setObjectName("Card")
         # title
@@ -80,18 +94,30 @@ class CardFrame(QFrame):
         self.setLayout(self.contentLayout)
 
     def setMinAndMaxSize(self):
-        # Set minimum and maximum dimensions for the card
+        """
+        Set minimum and maximum dimensions for the card
+        """
         self.setMaximumSize(QSize(300, 300))
         self.setMinimumSize(QSize(200, 200))
 
 
 class Debounce:
     def __init__(self, func: Callable, delay: int):
+        """
+        Initialize a debounce mechanism.
+
+        Parameters:
+        * func: The function to be debounced.
+        * delay: The debounce delay in milliseconds.
+        """
         self.func = func
         self.delay = delay
         self.timer = None
 
     def __call__(self):
+        """
+        Call the debounced function.
+        """
         print("Debounce called")
         if self.timer is not None:
             print("Stopping previous timer")
@@ -109,6 +135,12 @@ class DynamicLayoutApp(QScrollArea):
     """
 
     def __init__(self, cards: List[CardFrame]):
+        """
+        Initialize the dynamic layout application.
+
+        Parameters
+        * cards: A list of CardFrame instances representing cards.
+        """
         super().__init__()
         self.cards: List[CardFrame] = cards
         self.setObjectName("ParametersScollArea")
@@ -119,13 +151,23 @@ class DynamicLayoutApp(QScrollArea):
         self.initUI()
 
     def readQss(self, style_path) -> str:
+        """
+        Read and return the content of a QSS style file.
+
+        Parametrs:
+        * style_path: The path to the QSS style file.
+
+        return: The content of the QSS style file.
+        """
         with open(style_path, "r") as style_file:
             Qssfile = style_file.read()
         return Qssfile
 
     def initParameters(self):
-        # Initialize layout parameters
-        self.columns = 0
+        """
+        Initialize layout parameters
+        """
+        self.columns = 0  # the frame current columns that is used to judge if the columns change
         self.spacing = 5
         self.initRows = 20
         self.updateRows = 10
@@ -134,14 +176,18 @@ class DynamicLayoutApp(QScrollArea):
         self.nowColumn = 0
 
     def initFlags(self):
-        # Initialize flags and debounce mechanism
+        """
+        Initialize flags and debounce mechanism
+        """
         self.isInitial = True
         debounce_delay = 50  # Debounce delay in milliseconds
         self.debounce_update_layout = Debounce(
             self.updateLayout, debounce_delay)
 
     def initUI(self):
-        # Initialize the UI components
+        """
+        Initialize the UI components
+        """
         self.setMinimumSize(QSize(480, 480))
         self.CardWidget = QWidget()
         self.CardWidget.setSizePolicy(
@@ -155,17 +201,33 @@ class DynamicLayoutApp(QScrollArea):
         self.setWidgetResizable(True)
 
     def addCard(self, index: int, row: int, col: int):
-        # Add a card to the grid layout
+        """
+        Add a card to the grid layout.
+
+        Parameters:
+        * index: Index of the card to add.
+        * row: Row position to add the card.
+        * col: Column position to add the card.
+        """
         self.gridLayout.addWidget(self.cards[index], row, col)
 
     def updateRowColAndIndex(self, index: int, row: int, col: int):
-        # Update the current row, column, and index values
+        """
+        Update the current row, column, and index values.
+
+        Parameters:
+        * index: Updated index.
+        * row: Updated row.
+        * col: Updated column.
+        """
         self.nowRow = row
         self.nowColumn = col
         self.nowIndex = index
 
     def clearWidgets(self):
-        # Clear all widgets from the grid layout
+        """
+        Clear all widgets from the grid layout
+        """
         while self.gridLayout.count():
             widget = self.gridLayout.itemAt(0).widget()
             if widget:
@@ -173,7 +235,12 @@ class DynamicLayoutApp(QScrollArea):
                 widget.setParent(None)  # type: ignore
 
     def updateLayout(self, isInitial: bool = False):
-        # Update the layout of the scroll area's content
+        """
+        Update the layout of the scroll area's content.
+
+        Parameters: 
+        * isInitial: Whether the update is initial (default is False).
+        """
         print("update")
         self.debounce_update_layout.timer.stop()  # type: ignore
         numColumns = self.viewport().width(
@@ -198,7 +265,11 @@ class DynamicLayoutApp(QScrollArea):
         self.columns = numColumns
 
     def wheelEvent(self, wheelEvent: QWheelEvent):
-        # Handle wheel scrolling event
+        """
+        Handle wheel scrolling event
+
+        update the cards if wheel arrive at the bottom
+        """
         scroll_bar = self.verticalScrollBar()
         if wheelEvent.angleDelta().y() < 0:
             if scroll_bar.value() == scroll_bar.maximum():
@@ -206,13 +277,19 @@ class DynamicLayoutApp(QScrollArea):
         super().wheelEvent(wheelEvent)
 
     def ifReLayout(self, numColumns) -> bool:
-        # Check if the number of columns has changed
+        """
+        Check if the number of columns has changed
+        """
         if numColumns != self.columns:
             return True
         return False
 
     def resizeEvent(self, event: QResizeEvent):
-        # Resize event handler
+        """
+        Resize event handler
+
+        update the layout if the size of widget change 
+        """
         new_width = self.viewport().width()
         self.CardWidget.setFixedWidth(new_width)
         self.debounce_update_layout()

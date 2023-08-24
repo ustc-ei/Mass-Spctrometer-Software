@@ -142,17 +142,29 @@ class MainInterface(QWidget):
         self.setObjectName("MainInterface")
         self.setMinimumSize(QSize(500, 500))
         self.setupUI()
-        self.setQss("./style/MainInterface.css")
+        self.setStyleSheet(self.setQss("./style/MainInterface.css"))
         self.initFlags()
 
     def initFlags(self):
+        """
+        Initialize flags and debounce mechanism
+        """
         self.navigatorListWidget.setCurrentRow(0)
         self.menuButton.clicked.connect(self.toggleState)
         self.moveFlag = False
 
-    def setQss(self, style_path):
+    def setQss(self, style_path) -> str:
+        """
+        Read and return the content of a QSS style file.
+
+        Parameters:
+        * style_path: The path to the QSS style file.
+
+        return: The content of the QSS style file.
+        """
         with open(style_path, "r") as style_file:
-            self.setStyleSheet(style_file.read())
+            Qssfile = style_file.read()
+        return Qssfile
 
     def setupUI(self):
         """
@@ -216,6 +228,9 @@ class MainInterface(QWidget):
         self.toolInfoButton.clicked.connect(self.changeToolInfoFrameVisible)
 
     def changeToolInfoFrameVisible(self):
+        """
+        change the visibility of the toolInfoFrame
+        """
         if self.toolInfoFrame.isVisibleFlag:
             self.toolInfoFrame.setVisible(False)
         else:
@@ -226,6 +241,9 @@ class MainInterface(QWidget):
         self.toolInfoFrame.isVisibleFlag = not self.toolInfoFrame.isVisibleFlag
 
     def shinkNavigationBar(self):
+        """
+        shink the navigationBar
+        """
         self.toolInfoButton.changeWithoutText()
         self.navigatorListWidget.clearText()
         self.navigatorListWidget.setFixedWidth(
@@ -234,6 +252,9 @@ class MainInterface(QWidget):
             self.toolInfoButton.iconMapSize.width())
 
     def expandNavigationBar(self):
+        """
+        expand the navigationBar
+        """
         self.toolInfoButton.recoverToInitial()
         self.navigatorListWidget.recoverText()
         self.navigatorListWidget.setFixedWidth(

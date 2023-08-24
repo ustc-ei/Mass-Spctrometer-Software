@@ -20,20 +20,40 @@ from cardFrame import DynamicLayoutApp, CardFrame
 
 class HomePage(QWidget):
     def __init__(self, parent: Optional[QWidget] = None) -> None:
+        """
+        Initialize the home page widget.
+
+        Parameters:
+        * parent: The parent widget (default is None).
+        """
         super(HomePage, self).__init__(parent)
         self.setupUI()
         self.setStyleSheet(self.readQss("./style/HomePage.css"))
         self.initFlags()
 
     def readQss(self, style_path) -> str:
+        """
+        Read and return the content of a QSS style file.
+
+        Parameters:
+        * style_path: The path to the QSS style file.
+
+        return: The content of the QSS style file.
+        """
         with open(style_path, "r") as style_file:
             Qssfile = style_file.read()
         return Qssfile
 
     def initFlags(self):
+        """
+        Initialize flags and settings for the home page.
+        """
         self.navigator.setCurrentRow(0)
 
     def setupUI(self):
+        """
+        Set up the user interface of the home page.
+        """
         self.mainLayout = QVBoxLayout()
         # Navigator Layout
         self.navigator = Navigator(names=['参数展示', '进度展示'], parent=self)
@@ -68,6 +88,15 @@ class HomePage(QWidget):
         self.setLayout(self.mainLayout)
 
     def generateCards(self, nums: int, parametersTitle: List[str]) -> List[CardFrame]:
+        """
+        Generate a list of card frames.
+
+        Parameters:
+        * nums: The number of cards to generate.
+        * parametersTitle: The list of parameter titles.
+
+        return: A list of CardFrame instances.
+        """
         cards: List[CardFrame] = []
         for i in range(nums):
             cards.append(CardFrame(parametersTitle[i], 5))
