@@ -139,6 +139,7 @@ class MainInterface(QWidget):
         main interface class
         """
         super().__init__(parent)
+        self.setWindowTitle("Mass-Spctrometer-Software")
         self.setObjectName("MainInterface")
         self.setMinimumSize(QSize(500, 500))
         self.setupUI()

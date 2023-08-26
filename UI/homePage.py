@@ -16,6 +16,7 @@ from PySide6.QtCore import Qt
 from navigator import Navigator
 from utils import initialTheLayout
 from cardFrame import DynamicLayoutApp, CardFrame
+from progressShow import ProgressShow
 
 
 class HomePage(QWidget):
@@ -81,7 +82,9 @@ class HomePage(QWidget):
         self.cardFrames = self.generateCards(
             500, ["质谱仪参数" for i in range(500)])
         self.parametersWidget = DynamicLayoutApp(self.cardFrames)
+        self.progressShowWidget = ProgressShow()
         self.stackWidget.addWidget(self.parametersWidget)
+        self.stackWidget.addWidget(self.progressShowWidget)
         # set main Layout
         initialTheLayout(self.mainLayout, [
                          self.navigatorFrame, self.stackWidget], [1, 5], True)

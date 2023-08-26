@@ -169,7 +169,7 @@ class DynamicLayoutApp(QScrollArea):
         """
         self.columns = 0  # the frame current columns that is used to judge if the columns change
         self.spacing = 5
-        self.initRows = 20
+        self.initRows = 5
         self.updateRows = 10
         self.nowIndex = 0
         self.nowRow = 0
@@ -290,9 +290,11 @@ class DynamicLayoutApp(QScrollArea):
 
         update the layout if the size of widget change 
         """
+        self.isInitial = True
         new_width = self.viewport().width()
         self.CardWidget.setFixedWidth(new_width)
         self.debounce_update_layout()
+        self.isInitial = False
 
 
 if __name__ == "__main__":

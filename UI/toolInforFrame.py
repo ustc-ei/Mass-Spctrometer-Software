@@ -92,13 +92,13 @@ class ToolInfor(QFrame):
         self.statementLayout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.statementFont = Font(12, ["Helvetica", "微软雅黑", "宋体"])
         self.statement1 = Label(self.statementFont)
-        self.statement1.setText("该软件全部开源, GitHub 地址为 ")
+        self.statement1.setText("软件 GitHub 地址为 ")
         self.statement2 = Label(self.statementFont)
         self.statement2.setOpenExternalLinks(True)
         self.statement2.setTextInteractionFlags(
             Qt.TextInteractionFlag.TextBrowserInteraction)
         self.statement2.setText(
-            '<a href="https://github.com/ustc-ei/Mass-Spctrometer-Software">GitHub Repository</a>')
+            '<a href="https://github.com/ustc-ei/Mass-Spctrometer-Software">Mass-Spctrometer-Software</a>')
         self.statementLayout.addWidget(self.statement1)
         self.statementLayout.addWidget(self.statement2)
         # add the widgets to the layout

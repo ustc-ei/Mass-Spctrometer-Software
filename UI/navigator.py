@@ -89,6 +89,6 @@ class Navigator(QListWidget):
                 self.itemNoSelectedFont)
         self.item(selected.indexes()[0].row()).setFont(self.itemSelectedFont)
         # toggle the current widget of the stackwidgets
-        if selected.indexes()[0].row() == 0:
-            self._parent.stackWidget.setCurrentIndex(  # type: ignore
+        # if selected.indexes()[0].row() == 0:
+        self._parent.stackWidget.setCurrentIndex(  # type: ignore
                 selected.indexes()[0].row())  # type: ignore
