@@ -120,3 +120,10 @@ QPushButton#TableWidgetDeleteButton {
     font-size: 14px;
     font-weight: bold;
 }
+
+
+QPushButton#TableWidgetDeleteButton:pressed {
+    padding: 0px;
+    padding-left: 2px;
+    padding-top: 2px;
+}

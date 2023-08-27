@@ -22,8 +22,8 @@ class ButtonEmitRow(QPushButton):
         super(ButtonEmitRow, self).__init__(text)
         self.row = row
         self.connectSignal()
-        self.setMaximumSize(QSize(150, 50))
-        self.setMinimumSize(QSize(100, 30))
+        self.setMaximumSize(QSize(100, 50))
+        self.setMinimumSize(QSize(80, 30))
 
     def updateRow(self, row: int):
         self.row = row

@@ -236,7 +236,7 @@ class MainInterface(QWidget):
             self.toolInfoFrame.setVisible(False)
         else:
             self.toolInfoFrame.setVisible(True)
-            pos = self.toolInfoButton.pos() + self.pos() # type: ignore
+            pos = self.toolInfoButton.pos() + self.pos()  # type: ignore
             size = self.toolInfoButton.size() + QSize(0, -self.toolInfoFrame.widget.height())
             self.toolInfoFrame.move(pos + QPoint(size.width(), size.height()))
         self.toolInfoFrame.isVisibleFlag = not self.toolInfoFrame.isVisibleFlag

@@ -85,7 +85,6 @@ class HomePage(QWidget):
         self.progressShowWidget = ProgressShow()
         self.stackWidget.addWidget(self.parametersWidget)
         self.stackWidget.addWidget(self.progressShowWidget)
-        print(self.progressShowWidget.parent())
         # set main Layout
         initialTheLayout(self.mainLayout, [
                          self.navigatorFrame, self.stackWidget], [1, 5], True)
