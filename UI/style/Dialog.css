@@ -1,0 +1,47 @@
+QDialog QFrame#DialogTitle {
+    border: none;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 1, stop: 0 #ff8888, stop: 1 #8888ff);
+}
+
+QDialog QFrame#DialogTitle QPushButton {
+    background-color: transparent;
+    border: none;
+    border-radius: 6px;
+}
+
+QDialog QFrame#DialogTitle QPushButton:hover {
+    background-color: rgba(240, 255, 255, 50);
+}
+
+QDialog QFrame#DialogTitle QPushButton:pressed {
+    background-color: rgba(245, 222, 179, 100);
+}
+
+QDialog QFrame#DialogMain {
+    background-color: white;
+    border: 1px solid skyblue;
+    border-radius: 4px;
+}
+
+QDialog QPushButton#DialogButton {
+    background-color: rgb(135, 206, 235);
+    color: white;
+    font-family: "Helvetica", "微软雅黑", "宋体";
+    border: none;
+    border-radius: 10px;
+    /* font-weight: bold; */
+    font-size: 18px;
+}
+
+QDialog QPushButton#DialogButton::pressed {
+    padding-left: 2px;
+    padding-top: 2px;
+    background-color: rgba(135, 206, 235, 200);
+}
+
+QDialog QLabel {
+    font-family: "Helvetica", "微软雅黑", "宋体";
+    font-size: 18px;
+}

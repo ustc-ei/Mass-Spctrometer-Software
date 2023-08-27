@@ -1,7 +1,6 @@
 import sys
 from time import sleep
-from typing import Optional
-import PySide6.QtGui
+from typing import Optional, List
 from PySide6.QtWidgets import (
     QWidget,
     QApplication,
@@ -9,15 +8,12 @@ from PySide6.QtWidgets import (
     QProgressBar,
     QVBoxLayout,
     QHBoxLayout,
-    QTableWidget,
     QFrame
 )
-
-
+from PySide6.QtGui import QCloseEvent
 from PySide6.QtCore import QThread, Signal, QSize, Qt
-import pandas as pd
 from utils import initialTheLayout
-from tableWidget import TableWidget, TableWidgetWithButton
+from tableWidget import TableWidgetWithButton
 
 
 # class ProgressDataTableWidget(TableWidget):
@@ -35,7 +31,11 @@ class ProgressUpdateThread(QThread):
 
         use the Qthread to update the progress UI
         """
+        self.running = True
         super(ProgressUpdateThread, self).__init__(parent)
+
+    def stop(self):
+        self.running = False
 
 
 class DataAcqusionUpdateThread(ProgressUpdateThread):
@@ -46,6 +46,8 @@ class DataAcqusionUpdateThread(ProgressUpdateThread):
         for i in range(101):
             sleep(0.1)
             self.signal.emit(i)
+            if self.running == False:
+                break
 
 
 class SampleAcqusionUpdateThread(ProgressUpdateThread):
@@ -56,6 +58,8 @@ class SampleAcqusionUpdateThread(ProgressUpdateThread):
         for i in range(101):
             sleep(0.2)
             self.signal.emit(i)
+            if self.running == False:
+                break
 
 
 class ProgressShow(QWidget):
@@ -64,8 +68,12 @@ class ProgressShow(QWidget):
         self.setupUI()
         self.setStyleSheet(self.setQss('./style/ProgressShow.css'))
         self.initUpdateProgressThread()
+        self.initFlags()
         self.signalConnect()
         self.startThread()
+
+    def initFlags(self):
+        pass
 
     def setQss(self, style_path) -> str:
         """
@@ -171,6 +179,17 @@ class ProgressShow(QWidget):
             self.sampleAcqusionThread.signal.connect(
                 self.updateSampleProgressBar)
             self.sampleAcqusionThread.start()
+
+    def destoryAllThread(self):
+        self.sampleAcqusionThread.stop()
+        self.dataAcqusionThread.stop()
+        self.sampleAcqusionThread.wait()
+        self.dataAcqusionThread.wait()
+        sleep(2.0)
+
+    def closeEvent(self, event: QCloseEvent) -> None:
+        self.destoryAllThread()
+        event.accept()
 
 
 if __name__ == "__main__":

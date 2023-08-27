@@ -150,7 +150,7 @@ class DynamicLayoutApp(QScrollArea):
         self.initFlags()
         self.initUI()
 
-    def readQss(self, style_path) -> str:
+    def setQss(self, style_path) -> str:
         """
         Read and return the content of a QSS style file.
 

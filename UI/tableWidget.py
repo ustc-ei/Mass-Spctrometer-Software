@@ -11,6 +11,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt, Signal, QSize
 from PySide6.QtGui import QWheelEvent
 import pandas as pd
+from dialog import BasicDialog
 
 
 class ButtonEmitRow(QPushButton):
@@ -108,7 +109,7 @@ class TableWidgetWithButton(TableWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         widget.setLayout(layout)
         self.setCellWidget(row, col, widget)
-        btn.signal.connect(self.selectRowData)
+        btn.signal.connect(self.selectSureDialog)
         return btn
 
     def insertDeleteButton(self, row: int, col: int) -> ButtonEmitRow:
@@ -120,7 +121,7 @@ class TableWidgetWithButton(TableWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         widget.setLayout(layout)
         self.setCellWidget(row, col, widget)
-        btn.signal.connect(self.deleteRowData)
+        btn.signal.connect(self.deleteSureDialog)
         return btn
 
     def updateTableData(self):
@@ -142,11 +143,21 @@ class TableWidgetWithButton(TableWidget):
             self.buttons.append((selectedButton, deleteButton))
         self.updateRowIndex(self.nowRows + numRows, self.nowIndex + numRows)
 
+    def selectSureDialog(self, row: int):
+        self.dialog = BasicDialog(
+            f"你确定要选择{row + 1}行的数据吗？", self.selectRowData, (row, ))
+        self.dialog.show()
+
     def selectRowData(self, row: int):
         reData = []
         for col in range(self.numColumns):
             item = self.item(row, col)
             reData.append(item.text())
+
+    def deleteSureDialog(self, row: int):
+        self.dialog = BasicDialog(
+            f"你确定要删除{row + 1}行的数据吗？", self.deleteRowData, (row, ))
+        self.dialog.show()
 
     def deleteRowData(self, row: int):
         self.removeRow(row)

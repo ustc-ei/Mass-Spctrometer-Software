@@ -29,10 +29,10 @@ class HomePage(QWidget):
         """
         super(HomePage, self).__init__(parent)
         self.setupUI()
-        self.setStyleSheet(self.readQss("./style/HomePage.css"))
+        self.setStyleSheet(self.setQss("./style/HomePage.css"))
         self.initFlags()
 
-    def readQss(self, style_path) -> str:
+    def setQss(self, style_path) -> str:
         """
         Read and return the content of a QSS style file.
 
@@ -85,6 +85,7 @@ class HomePage(QWidget):
         self.progressShowWidget = ProgressShow()
         self.stackWidget.addWidget(self.parametersWidget)
         self.stackWidget.addWidget(self.progressShowWidget)
+        print(self.progressShowWidget.parent())
         # set main Layout
         initialTheLayout(self.mainLayout, [
                          self.navigatorFrame, self.stackWidget], [1, 5], True)

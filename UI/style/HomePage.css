@@ -75,17 +75,16 @@ QScrollBar::sub-line:vertical {
 QScrollBar:horizontal {
     border: none;
     background: transparent;
-    width: 6px;
+    height: 6px;
     margin: 0px;
 }
 
 QScrollBar::handle:horizontal {
     background-color: rgb(139, 139, 139);
     border-radius: 3px;
-    min-height: 80px;
-    /* 设置一个固定的最小高度 */
-    max-height: 100px;
-    /* 设置一个固定的最大高度 */
+    min-height: 5;
+    min-width: 40px;
+    max-width: 60px;
     margin: 0px;
     /* 清除滑块的边距 */
 }

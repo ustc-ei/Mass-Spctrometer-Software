@@ -12,8 +12,8 @@ from PySide6.QtWidgets import (
     QSizePolicy
 )
 
-from PySide6.QtGui import QPixmap, QResizeEvent, QCloseEvent, QMoveEvent
-from PySide6.QtCore import QSize, QPoint
+from PySide6.QtGui import QPixmap, QResizeEvent, QCloseEvent, QMoveEvent, QMouseEvent
+from PySide6.QtCore import QSize, QPoint, Qt
 from switchButton import SwitchButton
 from toolInforFrame import ToolInfor
 from utils import initialTheLayout, Font, QPixmap
@@ -236,7 +236,7 @@ class MainInterface(QWidget):
             self.toolInfoFrame.setVisible(False)
         else:
             self.toolInfoFrame.setVisible(True)
-            pos = self.toolInfoButton.pos() + self.pos()
+            pos = self.toolInfoButton.pos() + self.pos() # type: ignore
             size = self.toolInfoButton.size() + QSize(0, -self.toolInfoFrame.widget.height())
             self.toolInfoFrame.move(pos + QPoint(size.width(), size.height()))
         self.toolInfoFrame.isVisibleFlag = not self.toolInfoFrame.isVisibleFlag
@@ -301,32 +301,29 @@ class MainInterface(QWidget):
     def closeEvent(self, event: QCloseEvent) -> None:
         self.toolInfoFrame.close()
 
-    def moveEvent(self, event: QMoveEvent) -> None:
-        if self.toolInfoFrame.isVisibleFlag:
-            self.toolInfoFrame.isVisibleFlag = False
-            self.toolInfoFrame.setVisible(False)
-    # def mousePressEvent(self, event: QMouseEvent) -> None:
-    #     if event.buttons() == Qt.MouseButton.LeftButton:
-    #         self.moveFlag = True
-    #         self.mouseOriginPoint = event.pos()
-    #         self.originPoint = self.pos()
+    def mousePressEvent(self, event: QMouseEvent) -> None:
+        if event.buttons() == Qt.MouseButton.LeftButton:
+            self.moveFlag = True
+            self.mouseOriginPoint = QPoint(
+                event.position().x(), event.position().y())  # type: ignore
+        else:
+            super().mousePressEvent(event)
 
-    # def mouseReleaseEvent(self, event: QMouseEvent) -> None:
-    #     if event.buttons() == Qt.MouseButton.LeftButton:
-    #         self.moveFlag = False
+    def mouseReleaseEvent(self, event: QMouseEvent) -> None:
+        if event.buttons() == Qt.MouseButton.LeftButton:
+            self.moveFlag = False
+        super().mouseReleaseEvent(event)
 
-    # def mouseMoveEvent(self, event: QMouseEvent) -> None:
-    #     diff = event.pos() - self.mouseOriginPoint
-    #     if self.moveFlag:
-    #         if diff.manhattanLength() > 5:  # 设置阈值，避免过于频繁的移动
-    #             self.move(self.pos() + diff)
-    #             if self.toolInfoFrame.isVisibleFlag:
-    #                 self.toolInfoFrame.move(
-    #                     self.toolInfoFrame.pos() + diff)
+    def mouseMoveEvent(self, event: QMouseEvent) -> None:
+        diff = QPoint(event.position().x(), event.position().y()  # type: ignore
+                      ) - self.mouseOriginPoint
+        if self.moveFlag:
+            if diff.manhattanLength() > 5:  # 设置阈值，避免过于频繁的移动
+                self.move(self.pos() + diff)  # type: ignore
 
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
+    app = QApplication(sys.argv)  # type: ignore
     x = MainInterface()
     x.show()
-    sys.exit(app.exec())
+    app.exec()
