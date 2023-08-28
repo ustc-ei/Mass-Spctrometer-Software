@@ -18,47 +18,6 @@ QLabel#SampleAcqusion {
     font-weight: bold;
 }
 
-QHeaderView {
-    background: transparent;
-}
-
-QHeaderView::section {
-    font-size: 20px;
-    font-family: "Microsoft YaHei";
-    color: rgb(144, 147, 153);
-    border: none;
-    border-bottom: 1px solid #EEF1F7;
-    background: rgb(255, 255, 255);
-    text-align: left;
-    min-height: 49px;
-    max-height: 49px;
-    margin-left: 0px;
-    padding-left: 0px;
-}
-
-QTableWidget {
-    outline: none;
-    background: #FFFFFF;
-    border: none;
-    font-size: 20px;
-    font-family: "Microsoft YaHei";
-    color: rgb(96, 98, 102);
-}
-
-QTableWidget::item {
-    border: none;
-    border-bottom: 1px solid #EEF1F7;
-}
-
-QTableWidget::item:hover {
-    background-color: rgb(245, 247, 250);
-}
-
-QTableWidget::item::selected {
-    color: rgb(96, 98, 102);
-    background-color: rgb(234, 243, 253);
-}
-
 QFrame#ProgressFrame {
     background-color: white;
     border: none;
@@ -85,45 +44,4 @@ QProgressBar::chunk {
     padding: 0px;
     border: none;
     border-radius: 10px;
-}
-
-QPushButton#TableWidgetSelectButton {
-    border: none;
-    border-radius: 4px;
-    color: white;
-    background-color: rgb(135, 206, 235);
-    margin: 0px;
-    margin-left: 4px;
-    margin-right: 4px;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-QPushButton#TableWidgetSelectButton:pressed {
-    padding: 0px;
-    padding-left: 2px;
-    padding-top: 2px;
-}
-
-QPushButton#TableWidgetDeleteButton {
-    border: none;
-    border-radius: 4px;
-    color: white;
-    background-color: rgb(61, 104, 122);
-    margin: 0px;
-    margin-left: 4px;
-    margin-right: 4px;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-
-QPushButton#TableWidgetDeleteButton:pressed {
-    padding: 0px;
-    padding-left: 2px;
-    padding-top: 2px;
 }

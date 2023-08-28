@@ -13,7 +13,7 @@ from PySide6.QtGui import (
     QPen,
 )
 from PySide6.QtCore import QRect, Qt, QSize, QPoint
-from utils import *
+from utils import initialTheLayout, Font
 
 
 class SwitchButton(QPushButton):

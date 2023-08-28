@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (
     QSizePolicy,
     QScrollArea
 )
-from PySide6.QtCore import QSize, Qt, QTimer
+from PySide6.QtCore import QSize, QTimer
 from PySide6.QtGui import QResizeEvent, QWheelEvent
 
 

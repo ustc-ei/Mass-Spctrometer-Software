@@ -2,7 +2,6 @@ import sys
 from typing import Optional, List, Union
 from PySide6.QtWidgets import (
     QApplication,
-    QPushButton,
     QWidget,
     QStackedWidget,
     QVBoxLayout,
@@ -12,64 +11,17 @@ from PySide6.QtWidgets import (
     QSizePolicy
 )
 
-from PySide6.QtGui import QPixmap, QResizeEvent, QCloseEvent, QMoveEvent, QMouseEvent
+from PySide6.QtGui import QResizeEvent, QCloseEvent, QMoveEvent, QMouseEvent
 from PySide6.QtCore import QSize, QPoint, Qt
 from switchButton import SwitchButton
 from toolInforFrame import ToolInfor
-from utils import initialTheLayout, Font, QPixmap
+from instrumentSetting import InstrumentSetting
+from utils import initialTheLayout, ButtonWithPixmapChange, setQss
 from navigator import Navigator
 from homePage import HomePage
 
 
-class ButtonWithThePixmap(QPushButton):
-    def __init__(self, text: str, objectName: str, parent: Optional[QWidget] = None):
-        """
-        Base class for the menu and toolInfo buttons.
-
-        Parameters:
-        * parent: The parent widget.
-        * text: The text to be displayed on the button.
-        """
-        super(ButtonWithThePixmap, self).__init__(parent)
-        self.setObjectName(objectName)
-        # Set the button's font
-        font = Font(15, ["Helvetica", "微软雅黑", "宋体"])
-        self.setFont(font)
-
-        # Set the button's general properties
-        self.name = text
-        self.fixedSize = QSize(170, 50)
-        self.setMaximumSize(self.fixedSize)
-        self.setStyleSheet("text-align:left")
-
-        # Set the pixmap's general properties
-        self.pixMap = QPixmap()
-        self.pixMapSize = QSize(30, 30)
-
-        # Set icon of the button
-        self.iconMapSize = QSize(50, 50)
-        self.setIconSize(self.iconMapSize)
-
-        # Set size of the button
-        self.setFixedSize(self.fixedSize)
-
-    def changeThePixmapAndText(self, pixMapPath: str, text: str, size: QSize):
-        """
-        Change the pixmap and text of the button, simulating a drawer switch.
-
-        Parameters:
-        - pixMapPath: URL path to the pixmap.
-        - text: The text to be displayed on the button.
-        - size: The desired button size.
-        """
-        self.pixMap.load(pixMapPath)
-        self.setText(text)
-        # self.pixMap = self.pixMap.scaled(self.pixMapSize)
-        self.setFixedSize(size)
-        self.setIcon(self.pixMap)
-
-
-class ToolInfoButton(ButtonWithThePixmap):
+class ToolInfoButton(ButtonWithPixmapChange):
     def __init__(self, text: str, ObjectName: str, parent: Optional[QWidget] = None):
         """
         Tool Information Button class.
@@ -95,7 +47,7 @@ class ToolInfoButton(ButtonWithThePixmap):
         self.changeThePixmapAndText(self.pixMapPath, "", self.iconMapSize)
 
 
-class MenuButton(ButtonWithThePixmap):
+class MenuButton(ButtonWithPixmapChange):
     def __init__(self, text: str, ObjectName: str, parent: Optional[QWidget] = None):
         """
         Menu Button class.
@@ -143,7 +95,7 @@ class MainInterface(QWidget):
         self.setObjectName("MainInterface")
         self.setMinimumSize(QSize(500, 500))
         self.setupUI()
-        self.setStyleSheet(self.setQss("./style/MainInterface.css"))
+        self.setStyleSheet(setQss("./style/MainInterface.css"))
         self.initFlags()
 
     def initFlags(self):
@@ -153,19 +105,6 @@ class MainInterface(QWidget):
         self.navigatorListWidget.setCurrentRow(0)
         self.menuButton.clicked.connect(self.toggleState)
         self.moveFlag = False
-
-    def setQss(self, style_path) -> str:
-        """
-        Read and return the content of a QSS style file.
-
-        Parameters:
-        * style_path: The path to the QSS style file.
-
-        return: The content of the QSS style file.
-        """
-        with open(style_path, "r") as style_file:
-            Qssfile = style_file.read()
-        return Qssfile
 
     def setupUI(self):
         """
@@ -198,7 +137,9 @@ class MainInterface(QWidget):
         self.stackwidgetsLayout = QVBoxLayout()
         self.stackWidget = QStackedWidget()
         self.homePage = HomePage()
+        self.instrumentSetting = InstrumentSetting()
         self.stackWidget.addWidget(self.homePage)
+        self.stackWidget.addWidget(self.instrumentSetting)
         # 1. toggle layout
         self.toggleSwitchLayout = QHBoxLayout()
         self.spacerItem1 = QSpacerItem(40, 5, QSizePolicy.Policy.Expanding)

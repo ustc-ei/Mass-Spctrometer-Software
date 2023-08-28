@@ -1,0 +1,108 @@
+QLabel#ToolText {
+    text-align: center;
+    max-width: 220px;
+    max-height: 35px;
+    min-width: 190px;
+    min-height: 30px;
+    color: white;
+    background-color: rgb(135, 206, 235);
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    font-family: "Helvetica", "微软雅黑", "宋体";
+    font-weight: bold;
+}
+
+QPushButton#AddDataButton {
+    color: gray;
+    background-color: white;
+    /* border: 2px solid bisque; */
+    border-radius: 12px;
+    font-size: 15px;
+    font-family: "Helvetica", "微软雅黑", "宋体";
+    font-weight: bold;
+}
+
+QPushButton#AddDataButton:hover {
+    border: 1px solid gray;
+}
+
+QPushButton#AddDataButton:pressed {
+    padding-left: 2px;
+    padding-top: 2px;
+}
+
+QPushButton#upSortButton {
+    color: gray;
+    background-color: white;
+    border-radius: 12px;
+    font-size: 15px;
+    font-family: "Helvetica", "微软雅黑", "宋体";
+    font-weight: bold;
+}
+
+QPushButton#upSortButton:hover {
+    border: 1px solid gray;
+}
+
+QPushButton#upSortButton:pressed {
+    padding-left: 2px;
+    padding-top: 2px;
+}
+
+QPushButton#downSortButton {
+    color: gray;
+    background-color: white;
+    border-radius: 12px;
+    font-size: 15px;
+    font-family: "Helvetica", "微软雅黑", "宋体";
+    font-weight: bold;
+}
+
+QPushButton#downSortButton:hover {
+    border: 1px solid gray;
+}
+
+QPushButton#downSortButton:pressed {
+    padding-left: 2px;
+    padding-top: 2px;
+}
+
+QLabel#MassLabel,
+QLabel#LiquidLabel {
+    font-size: 15px;
+    font-family: "Helvetica", "微软雅黑", "宋体";
+}
+
+QLabel#MassParameters,
+QLabel#LiquidParameters {
+    font-size: 20px;
+    font-family: "Helvetica", "微软雅黑", "宋体";
+}
+
+QComboBox {
+    background-color: transparent;
+    border-radius: 10px;
+    border: 2px solid skyblue;
+    color: gray;
+    font-size: 18px;
+    font-family: "Helvetica", "微软雅黑", "宋体";
+}
+
+QComboBox QAbstractItemView {
+    background: rgba(255, 255, 255, 1);
+    border: 1px solid rgba(228, 228, 228, 1);
+    border-radius: 0px 0px 5px 5px;
+    font-size: 14px;
+    outline: 0px;
+}
+
+QComboBox QAbstractItemView::item {
+    height: 30px;
+    border-radius: 10px;
+}
+
+QComboBox QAbstractItemView::item:selected {
+    background-color: skyblue;
+    color: white;
+}

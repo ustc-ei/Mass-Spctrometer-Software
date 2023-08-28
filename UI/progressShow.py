@@ -12,8 +12,8 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtGui import QCloseEvent
 from PySide6.QtCore import QThread, Signal, QSize, Qt
-from utils import initialTheLayout
-from tableWidget import TableWidgetWithButton
+from utils import initialTheLayout, setQss
+from tableWidget import TableWidgetWithButtons
 
 
 # class ProgressDataTableWidget(TableWidget):
@@ -66,7 +66,7 @@ class ProgressShow(QWidget):
     def __init__(self, parent: Optional[QWidget] = None) -> None:
         super(ProgressShow, self).__init__(parent)
         self.setupUI()
-        self.setStyleSheet(self.setQss('./style/ProgressShow.css'))
+        self.setStyleSheet(setQss('./style/ProgressShow.css'))
         self.initUpdateProgressThread()
         self.initFlags()
         self.signalConnect()
@@ -74,19 +74,6 @@ class ProgressShow(QWidget):
 
     def initFlags(self):
         pass
-
-    def setQss(self, style_path) -> str:
-        """
-        Read and return the content of a QSS style file.
-
-        Parameters:
-        * style_path: The path to the QSS style file.
-
-        return: The content of the QSS style file.
-        """
-        with open(style_path, "r") as style_file:
-            Qssfile = style_file.read()
-        return Qssfile
 
     def initUpdateProgressThread(self):
         self.dataAcqusionThread = DataAcqusionUpdateThread(self)
@@ -108,9 +95,9 @@ class ProgressShow(QWidget):
         self.sampleProgressLayout = QHBoxLayout()
         self.porgressLayout = QVBoxLayout()
         # Table
-        self.tableWidget = TableWidgetWithButton(
+        self.tableWidget = TableWidgetWithButtons(
             data="./TableWidgetTestData.csv",
-            headLables=["日期", "姓名", "省份", "市区", "地址", "邮编", "操作1", "操作2"])
+            headLabels=["日期", "姓名", "省份", "市区", "地址", "邮编", "操作1", "操作2"])
         # progress
         self.progressFrame = QFrame()
         self.progressFrame.setObjectName("ProgressFrame")

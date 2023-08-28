@@ -9,12 +9,13 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QSizePolicy,
     QScrollArea,
-    QLabel
+    QLabel,
+    QVBoxLayout
 )
 
 from PySide6.QtCore import QSize, Qt, QTimer
 from PySide6.QtGui import QResizeEvent, QWheelEvent
-from utils import *
+from utils import initialTheLayout, setQss
 
 
 class CardFrame(QFrame):
@@ -149,19 +150,6 @@ class DynamicLayoutApp(QScrollArea):
         self.initParameters()
         self.initFlags()
         self.initUI()
-
-    def setQss(self, style_path) -> str:
-        """
-        Read and return the content of a QSS style file.
-
-        Parametrs:
-        * style_path: The path to the QSS style file.
-
-        return: The content of the QSS style file.
-        """
-        with open(style_path, "r") as style_file:
-            Qssfile = style_file.read()
-        return Qssfile
 
     def initParameters(self):
         """

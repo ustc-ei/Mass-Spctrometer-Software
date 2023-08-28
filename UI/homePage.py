@@ -14,7 +14,7 @@ from PySide6.QtWidgets import (
 
 from PySide6.QtCore import Qt
 from navigator import Navigator
-from utils import initialTheLayout
+from utils import initialTheLayout, setQss
 from cardFrame import DynamicLayoutApp, CardFrame
 from progressShow import ProgressShow
 
@@ -29,21 +29,8 @@ class HomePage(QWidget):
         """
         super(HomePage, self).__init__(parent)
         self.setupUI()
-        self.setStyleSheet(self.setQss("./style/HomePage.css"))
+        self.setStyleSheet(setQss("./style/HomePage.css"))
         self.initFlags()
-
-    def setQss(self, style_path) -> str:
-        """
-        Read and return the content of a QSS style file.
-
-        Parameters:
-        * style_path: The path to the QSS style file.
-
-        return: The content of the QSS style file.
-        """
-        with open(style_path, "r") as style_file:
-            Qssfile = style_file.read()
-        return Qssfile
 
     def initFlags(self):
         """

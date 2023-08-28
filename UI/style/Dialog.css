@@ -1,8 +1,8 @@
 QDialog QFrame#DialogTitle {
     border: none;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 1, stop: 0 #ff8888, stop: 1 #8888ff);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 wheat, stop: 1 rgba(206, 145, 120, 100));
 }
 
 QDialog QFrame#DialogTitle QPushButton {
@@ -21,8 +21,8 @@ QDialog QFrame#DialogTitle QPushButton:pressed {
 
 QDialog QFrame#DialogMain {
     background-color: white;
-    border: 1px solid skyblue;
-    border-radius: 4px;
+    border: 2px solid skyblue;
+    border-radius: 14px;
 }
 
 QDialog QPushButton#DialogButton {
@@ -41,7 +41,32 @@ QDialog QPushButton#DialogButton::pressed {
     background-color: rgba(135, 206, 235, 200);
 }
 
-QDialog QLabel {
+QDialog QLabel#ToolText {
+    font-family: "Helvetica", "微软雅黑", "宋体";
+    color: gray;
+    font-size: 18px;
+}
+
+QDialog QLabel#EditName {
+    font-family: "Helvetica", "微软雅黑", "宋体";
+    color: rgba(128, 128, 128, 100);
+    font-size: 18px;
+}
+
+QDialog QLabel#EditName:disabled {
+    font-weight: bold;
+    color: rgb(128, 128, 128);
+}
+
+QDialog QLineEdit#Edit {
+    border: 1px solid rgba(128, 128, 128, 100);
+    border-radius: 12px;
+    min-height: 30px;
+    max-height: 40px;
     font-family: "Helvetica", "微软雅黑", "宋体";
     font-size: 18px;
+}
+
+QDialog QLineEdit#Edit:focus {
+    border: 2px solid gray;
 }
