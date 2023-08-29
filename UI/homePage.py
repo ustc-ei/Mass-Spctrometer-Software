@@ -67,7 +67,7 @@ class HomePage(QWidget):
         # QStackWidget
         self.stackWidget = QStackedWidget()
         self.cardFrames = self.generateCards(
-            500, ["质谱仪参数" for i in range(500)])
+            100, ["质谱仪参数" for _ in range(100)])
         self.parametersWidget = DynamicLayoutApp(self.cardFrames)
         self.progressShowWidget = ProgressShow()
         self.stackWidget.addWidget(self.parametersWidget)

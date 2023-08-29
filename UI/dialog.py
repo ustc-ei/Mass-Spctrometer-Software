@@ -224,6 +224,7 @@ class AddDialog(_AddEditBasicDialog):
         super(AddDialog, self).__init__(
             toolTipStr, Func, FuncArgs, Names, parent)
         self.connectSignal()
+        self.addPlaceholderText()
 
     def connectSignal(self):
         self.buttonSure.clicked.connect(self.addData)
@@ -236,6 +237,10 @@ class AddDialog(_AddEditBasicDialog):
             data.append(edit.text())
         self.Func(*self.FuncArgs, tuple(data))
         self.close()
+
+    def addPlaceholderText(self):
+        for idx, lineEdit in enumerate(self.editBoxs):
+            lineEdit.setPlaceholderText("请输入 " + self.Names[idx])
 
 
 class EditDialog(_AddEditBasicDialog):

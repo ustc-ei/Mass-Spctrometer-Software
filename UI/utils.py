@@ -1,5 +1,11 @@
 from typing import List, Union, Optional
-from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QSpacerItem, QPushButton
+from PySide6.QtWidgets import (
+    QVBoxLayout,
+    QHBoxLayout,
+    QWidget,
+    QSpacerItem,
+    QPushButton
+)
 from PySide6.QtGui import QFont, QPixmap
 from PySide6.QtCore import QSize
 

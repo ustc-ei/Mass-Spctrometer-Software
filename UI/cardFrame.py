@@ -1,4 +1,3 @@
-import sys
 from typing import List, Callable, Union, Optional
 
 from PySide6.QtWidgets import (
@@ -286,6 +285,7 @@ class DynamicLayoutApp(QScrollArea):
 
 
 if __name__ == "__main__":
+    import sys
     app = QApplication(sys.argv)
     card_list = []
     for i in range(101):

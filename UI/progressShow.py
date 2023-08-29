@@ -147,7 +147,8 @@ class ProgressShow(QWidget):
     def updateDataProgressBar(self, value: int):
         self.dataAcqusionProgress.setValue(value)
         if value == 100:
-            # 不能交换执行顺序, 不然可能程序会崩溃
+            # You cannot change the execution order
+            # Otherwise, the program may crash.
             self.dataAcqusionThread.quit()
             self.dataAcqusionThread.wait()
             del self.dataAcqusionThread
@@ -158,7 +159,8 @@ class ProgressShow(QWidget):
     def updateSampleProgressBar(self, value: int):
         self.sampleAcqusionProgress.setValue(value)
         if value == 100:
-            # 不能交换执行顺序, 不然可能程序会崩溃
+            # You cannot change the execution order
+            # Otherwise, the program may crash.
             self.sampleAcqusionThread.quit()
             self.sampleAcqusionThread.wait()
             del self.sampleAcqusionThread
@@ -172,7 +174,6 @@ class ProgressShow(QWidget):
         self.dataAcqusionThread.stop()
         self.sampleAcqusionThread.wait()
         self.dataAcqusionThread.wait()
-        sleep(2.0)
 
     def closeEvent(self, event: QCloseEvent) -> None:
         self.destoryAllThread()
