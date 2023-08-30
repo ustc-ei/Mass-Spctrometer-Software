@@ -7,7 +7,7 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QPushButton
 )
-from PySide6.QtCore import Qt, Signal, QSize, QItemSelection
+from PySide6.QtCore import Qt, Signal, QSize
 from PySide6.QtGui import QWheelEvent
 import pandas as pd
 from dialog import SelectDialog, DeleteDialog, EditDialog

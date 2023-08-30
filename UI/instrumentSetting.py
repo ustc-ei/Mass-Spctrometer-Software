@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import Optional, List, Sequence, Tuple
-from PySide6.QtCore import QSize, Qt, Signal
+from PySide6.QtCore import QSize, Qt, Signal, QPoint
 from PySide6.QtWidgets import (
     QApplication,
     QWidget,
@@ -84,9 +84,15 @@ class ComboBox(QComboBox):
         """
         super().__init__(parent)
         self.text = text
-        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        # 弹出窗口设置透明
+        # 不然设置背景颜色和圆角时会有黑框出现
+        self.view().parentWidget().setWindowFlags(
+            Qt.WindowType.Popup | Qt.WindowType.FramelessWindowHint)
+        self.view().parentWidget().setAttribute(
+            Qt.WidgetAttribute.WA_TranslucentBackground)
         self.initSelectData()
         self.setMaxMinSize()
+        self.setMaxVisibleItems(3)
 
     def initSelectData(self):
         """
@@ -100,6 +106,17 @@ class ComboBox(QComboBox):
         """
         self.setMaximumSize(QSize(120, 35))
         self.setMinimumSize(QSize(100, 35))
+
+    def showPopup(self) -> None:
+        point = self.mapToGlobal(QPoint(0, self.height()))
+        if self.count() > self.maxVisibleItems():
+            self.view().parentWidget().setGeometry(point.x(), point.y(),
+                                                   self.width(), self.maxVisibleItems()*30)
+        else:
+            self.view().parentWidget().setGeometry(
+                point.x(), point.y(), self.width(), self.count()*30)
+        self.view().parentWidget().show()
+        self.view().setFocus()
 
 
 class InstrumentSetting(QWidget):

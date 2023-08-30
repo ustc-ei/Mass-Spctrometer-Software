@@ -1,6 +1,6 @@
 import sys
 from time import sleep
-from typing import Optional, List
+from typing import Optional
 from PySide6.QtWidgets import (
     QWidget,
     QApplication,

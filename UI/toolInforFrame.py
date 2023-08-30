@@ -1,4 +1,4 @@
-from typing import Optional, Union, List
+from typing import Optional
 import sys
 from PySide6.QtWidgets import (
     QFrame,
@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtGui import QPixmap, QPainterPath, QPainter, QHideEvent
 from PySide6.QtCore import Qt, QSize, QPoint
-from utils import *
+from utils import initialTheLayout, Font
 
 
 class CircularLabel(QLabel):

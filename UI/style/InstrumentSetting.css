@@ -80,6 +80,41 @@ QLabel#LiquidParameters {
     font-family: "Helvetica", "微软雅黑", "宋体";
 }
 
+QComboBox QScrollArea {
+    background-color: rgb(241, 244, 255);
+}
+
+QComboBox QScrollBar:vertical {
+    border: none;
+    background: transparent;
+    width: 4px;
+    margin: 0px;
+}
+
+QComboBox QScrollBar::handle:vertical {
+    background-color: rgb(139, 139, 139);
+    border-radius: 2px;
+    min-height: 80px;
+    /* 设置一个固定的最小高度 */
+    max-height: 100px;
+    /* 设置一个固定的最大高度 */
+    margin: 0px;
+    /* 清除滑块的边距 */
+}
+
+QComboBox QScrollBar::handle:vertical:hover {
+    background: #777;
+}
+
+QComboBox QScrollBar::add-line:vertical {
+    height: 0px;
+}
+
+QComboBox QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+
 QComboBox {
     background-color: transparent;
     border-radius: 10px;
@@ -90,10 +125,12 @@ QComboBox {
 }
 
 QComboBox QAbstractItemView {
-    background: rgba(255, 255, 255, 1);
-    border: 1px solid rgba(228, 228, 228, 1);
-    border-radius: 0px 0px 5px 5px;
+    margin-top: 2px;
+    border: 1px solid gray;
+    background: rgba(135, 206, 235, 80);
+    border-radius: 10px;
     font-size: 14px;
+    margin-top: 2px;
     outline: 0px;
 }
 

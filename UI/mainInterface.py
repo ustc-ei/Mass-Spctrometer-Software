@@ -1,5 +1,5 @@
 import sys
-from typing import Optional, List, Union
+from typing import Optional
 from PySide6.QtWidgets import (
     QApplication,
     QWidget,
@@ -11,7 +11,7 @@ from PySide6.QtWidgets import (
     QSizePolicy
 )
 
-from PySide6.QtGui import QResizeEvent, QCloseEvent, QMoveEvent, QMouseEvent
+from PySide6.QtGui import QResizeEvent, QCloseEvent, QMouseEvent
 from PySide6.QtCore import QSize, QPoint, Qt
 from switchButton import SwitchButton
 from toolInforFrame import ToolInfor

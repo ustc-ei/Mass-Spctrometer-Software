@@ -1,0 +1,55 @@
+QListView {
+    margin-top: 5px;
+    outline: none;
+    background-color: white;
+    border: 1px solid #999999;
+    border-radius: 10px;
+}
+
+QListView::item {
+    height: 30px;
+    border-radius: 10px;
+}
+
+QListView::item:selected {
+    background-color: rgb(234, 234, 234);
+    color: black;
+}
+
+QListView::item:hover {
+    background-color: rgba(234, 234, 234, 150);
+}
+
+QListView QScrollArea {
+    background-color: transparent;
+}
+
+QListView QScrollBar:vertical {
+    border: none;
+    background: transparent;
+    width: 6px;
+    margin: 0px;
+}
+
+QListView QScrollBar::handle:vertical {
+    background-color: rgb(139, 139, 139);
+    border-radius: 3px;
+    min-height: 80px;
+    /* 设置一个固定的最小高度 */
+    max-height: 100px;
+    /* 设置一个固定的最大高度 */
+    margin: 0px;
+    /* 清除滑块的边距 */
+}
+
+QListView QScrollBar::handle:vertical:hover {
+    background: #777;
+}
+
+QListView QScrollBar::add-line:vertical {
+    height: 0px;
+}
+
+QListView QScrollBar::sub-line:vertical {
+    height: 0px;
+}

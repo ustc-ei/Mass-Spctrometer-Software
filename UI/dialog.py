@@ -13,7 +13,7 @@ from PySide6.QtWidgets import (
     QPushButton,
     QLineEdit
 )
-from PySide6.QtCore import Qt, QPoint, QSize
+from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QMouseEvent, QPixmap, QFocusEvent, QCursor
 from utils import initialTheLayout, setQss
 
