@@ -1,7 +1,7 @@
-from typing import List, Optional, Sequence
-import PySide6.QtGui
+from typing import Optional
+from PySide6.QtGui import QKeyEvent
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QCompleter, QListView
-from PySide6.QtCore import Qt, QStringListModel, QObject, QEvent
+from PySide6.QtCore import Qt, QStringListModel
 from utils import setQss, Font
 
 
@@ -19,6 +19,17 @@ class Completer(QCompleter):
         self.setFilterMode(Qt.MatchFlag.MatchContains)
 
 
+class LineEdit(QLineEdit):
+    def __init__(self, parent: Optional[QWidget] = None):
+        super(LineEdit, self).__init__(parent)
+
+    def keyPressEvent(self, event: QKeyEvent) -> None:
+        """
+        TODO: 当按下 enter 键时执行搜索功能
+        """
+        return super().keyPressEvent(event)
+
+
 class CodeCompleter(QWidget):
     def __init__(self):
         super().__init__()
@@ -28,7 +39,7 @@ class CodeCompleter(QWidget):
 
     def setupUI(self):
         layout = QVBoxLayout(self)
-        self.lineEdit = QLineEdit(self)
+        self.lineEdit = LineEdit(self)
         self.lineEdit.setObjectName("SearchEditLine")
         layout.addWidget(self.lineEdit)
 
