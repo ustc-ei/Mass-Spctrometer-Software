@@ -16,6 +16,7 @@ from PySide6.QtCore import QSize, QPoint, Qt
 from switchButton import SwitchButton
 from toolInforFrame import ToolInfor
 from instrumentSetting import InstrumentSetting
+from massGraph import MassGraph
 from utils import initialTheLayout, ButtonWithPixmapChange, setQss
 from navigator import Navigator
 from homePage import HomePage
@@ -102,9 +103,9 @@ class MainInterface(QWidget):
         """
         Initialize flags and debounce mechanism
         """
-        self.navigatorListWidget.setCurrentRow(0)
         self.menuButton.clicked.connect(self.toggleState)
         self.moveFlag = False
+        self.navigatorListWidget.setCurrentRow(0)
 
     def setupUI(self):
         """
@@ -138,8 +139,10 @@ class MainInterface(QWidget):
         self.stackWidget = QStackedWidget()
         self.homePage = HomePage()
         self.instrumentSetting = InstrumentSetting()
+        self.massGraph = MassGraph()
         self.stackWidget.addWidget(self.homePage)
         self.stackWidget.addWidget(self.instrumentSetting)
+        self.stackWidget.addWidget(self.massGraph)
         # 1. toggle layout
         self.toggleSwitchLayout = QHBoxLayout()
         self.spacerItem1 = QSpacerItem(40, 5, QSizePolicy.Policy.Expanding)

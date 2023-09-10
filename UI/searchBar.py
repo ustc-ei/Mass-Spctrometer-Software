@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Sequence
 from PySide6.QtGui import QKeyEvent
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QCompleter, QListView
 from PySide6.QtCore import Qt, QStringListModel
@@ -10,6 +10,8 @@ class ListView(QListView):
         super(ListView, self).__init__(parent)
         self.setWindowFlags(
             Qt.WindowType.Popup | Qt.WindowType.FramelessWindowHint)
+        self.setWindowOpacity(50)
+        self.viewport().setAutoFillBackground(False)
         self.setFont(Font(15, ["Helvetica", "微软雅黑", "宋体"]))
 
 
@@ -34,7 +36,6 @@ class CodeCompleter(QWidget):
     def __init__(self):
         super().__init__()
         self.setupUI()
-        self.populateCompleter()
         self.setStyleSheet(setQss('./style/SearchBar.css'))
 
     def setupUI(self):
@@ -53,14 +54,13 @@ class CodeCompleter(QWidget):
         self.completer.setModel(self.model)
         self.lineEdit.setCompleter(self.completer)
 
-    def populateCompleter(self):
-        suggestions = ["湖南", "河北", "河南",
-                       "arape", "aiwi", "arange", "aear", "atrawberry"]
+    def setPopulateCompleter(self, suggestions: Sequence[str]):
         self.model.setStringList(suggestions)
 
 
 if __name__ == "__main__":
     app = QApplication([])
     window = CodeCompleter()
+    window.setPopulateCompleter(["河南", "河北", "湖南"])
     window.show()
     app.exec()

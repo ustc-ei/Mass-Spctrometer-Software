@@ -29,7 +29,7 @@ QProgressBar {
     font-family: "Helvetica", "微软雅黑", "宋体";
     font-size: 14px;
     font-weight: bold;
-    border-radius: 10px;
+    border-radius: 8px;
     background-color: rgba(135, 206, 235, 140);
     min-width: 200px;
     min-height: 20px;
@@ -37,7 +37,7 @@ QProgressBar {
 }
 
 QProgressBar::chunk {
-    background-color: skyblue;
+    background-color: rgb(135, 206, 235);
     min-height: 20px;
     min-width: 20px;
     margin: 0px;

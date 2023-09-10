@@ -181,6 +181,9 @@ class TableWidget(QTableWidget):
         """
         super().wheelEvent(event)
 
+    def getDataGrip(self, column: str):
+        return list(set(self.df[column].to_list()))
+
 
 class TableWidgetWithButtons(TableWidget):
     def __init__(self,
@@ -240,7 +243,7 @@ class TableWidgetWithButtons(TableWidget):
         self.buttons: List[Tuple[ButtonEmitRow,
                                  ButtonEmitRow, ButtonEmitRow]] = []
 
-    def insertButton(self, row: int, col: int) -> Tuple[ButtonEmitRow, ButtonEmitRow, ButtonEmitRow]:
+    def insertButton(self, row: int, col: int) -> Tuple[ButtonEmitRow, ...]:
         """
         Insert Select, Delete, and Edit Buttons with Row Data
 
@@ -390,7 +393,7 @@ class TableWidgetWithButtons(TableWidget):
             data.append(self.item(row, col).text())
 
         self.dialog = EditDialog(
-            f"正在编辑第{row + 1}行的数据", self.editRowData, (row, ), tuple(self.headLabels[:self.numColumns]), tuple(data))
+            f"正在编辑第{row + 1}行的数据", self.editRowData, (row, ), tuple(self.headLabels[:self.numColumns]), tuple(data))  # type: ignore
         self.dialog.show()
 
     def editRowData(self, row: int, data: Tuple):
